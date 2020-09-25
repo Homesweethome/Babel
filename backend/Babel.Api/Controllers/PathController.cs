@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Babel.Api.Controllers
 {
+    [ApiController]
+    [Route("path")]
     public class PathController: ControllerBase
     {
         private readonly RoomService _roomService;

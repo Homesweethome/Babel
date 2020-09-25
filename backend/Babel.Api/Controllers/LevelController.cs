@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Babel.Api.Controllers
 {
+    [ApiController]
+    [Route("level")]
     public class LevelController: ControllerBase
     {
         private readonly RoomService _roomService;
