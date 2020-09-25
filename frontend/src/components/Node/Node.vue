@@ -1,4 +1,16 @@
 <template>
+    <!--    <g>-->
+    <!--        <foreightObject-->
+    <!--                :x="data.positionStart.x"-->
+    <!--                :y="data.positionStart.y"-->
+    <!--                :width="64"-->
+    <!--                :height="64"-->
+    <!--        >-->
+    <!--            <v-icon class="node-badge">-->
+    <!--                mdi-trash-->
+    <!--            </v-icon>-->
+    <!--        </foreightObject>-->
+    <!--    </g>-->
     <g @click="select">
         <circle :cx="data.positionStart.x"
                 :cy="data.positionStart.y"
@@ -30,15 +42,39 @@
                 icon: '',
             }
         },
-        computed: {
-            ...mapState('editor', {
+        computed:{
+            ...mapState('editor',{
                 modeEditor: 'modeEditor',
                 selectedNode: 'selectedNode'
             }),
         },
+        methods:{
+            ...mapActions('editor', {
+                selectNode: 'select_node'
+            }),
+            select(e){
+                e.preventDefault();
+                if (this.modeEditor=='draw'){
+                    return;
+                }
+                if (this.data.newElement) {
+                    return;
+                }
+                if (!this.data.newElement) {
+
+                    this.selectNode(this.data)
+                    e.stopPropagation();
+                }
+
+            }
+        }
     }
 </script>
 
 <style scoped>
-
+    .node-badge{
+        width: 64px;
+        height: 64px;
+        margin: -32px -32px;
+    }
 </style>

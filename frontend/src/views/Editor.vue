@@ -8,7 +8,6 @@
             </v-app-bar>
             <v-navigation-drawer
                     v-model="drawer"
-                    permanent
                     width="330"
                     app>
                 <v-row class="fill-height" no-gutters>
@@ -80,7 +79,7 @@
                 { title: 'About', icon: 'question_answer' },
             ],
         }),
-        computed: {
+        computed:{
             ...mapState('editor', {
                 selectNode: 'selectNode',
                 selectedNode: 'selectedNode',
@@ -88,16 +87,16 @@
                 selectedHomeElement: 'selectedHomeElement',
                 modeEditor: 'modeEditor'
             }),
-            activeRightBar: {
-                get() {
-                    return this.selectHomeElement || this.selectNode
+            activeRightBar:{
+                get(){
+                    return  this.selectHomeElement || this.selectNode
                 },
-                set() {
+                set(){
                     return
                 }
             },
-            modeEditorText() {
-                return this.modeEditor == 'draw' ? 'Режим рисования' : 'Режим выбора объектов'
+            modeEditorText(){
+                return this.modeEditor=='draw' ? 'Режим рисования' : 'Режим выбора объектов'
             }
         },
         created () {
@@ -107,5 +106,15 @@
 </script>
 
 <style scoped>
-
+    .mainWindow {
+        position: absolute;
+        top: 0;
+        left: 30px;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+    .v-main__wrap{
+        padding: 0;
+    }
 </style>

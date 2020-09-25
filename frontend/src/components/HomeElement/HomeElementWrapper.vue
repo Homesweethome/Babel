@@ -19,7 +19,7 @@
                 selectFloorId: 'selectFloorId'
             }),
             homeElementsByFloor(){
-                return this.homeElements.filter(n=>n.floor==this.selectFloorId)
+                return this.homeElements.filter(n=>n.level===this.selectFloorId)
             }
         },
     }

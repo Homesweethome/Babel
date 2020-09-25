@@ -1,25 +1,149 @@
 <template>
     <div>
-<!--        фон с планом здания-->
-        <svg class="scheme">
-            <img src="../../assets/scheme/1.png" alt="">
-        </svg>
-<!--        отображает элементы карты-->
-        <svg>
-            <home-element-wrapper />
-            <home-element />
-            <node-wrapper />
-        </svg>
+        <div @click="onClick">
+            <svg>
+                <image
+                        style="opacity: 0.5; filter: invert(1)"
+                        :href="selectFloor.pathImage"
+                        x="50"
+                        y="60"
+                        width="1000"
+                />
+            </svg>
+            <svg
+                    @mousemove="onMouseMove"
+            ><g>
+
+                <home-element-wrapper />
+
+                <home-element
+                        v-show="stageDrawHomeElement!='start'"
+                        :data="newHomeElement"
+                />
+                <node-wrapper />
+            </g>
+            </svg>
+        </div>
     </div>
 </template>
 
 <script>
-    import HomeElementWrapper from "@/components/HomeElement/HomeElementWrapper";
-    import HomeElement from "@/components/HomeElement/HomeElement";
     import NodeWrapper from "@/components/Node/NodeWrapper";
+    import HomeElementWrapper from "@/components/HomeElement/HomeElementWrapper";
+    import HomeElement from "@/components/HomeElement/HomeElement"
+    // import Node from "@/components/Node/Node";
+    import {mapActions, mapState} from 'vuex'
     export default {
         name: "EditorWorkPage",
-        components: {NodeWrapper, HomeElement, HomeElementWrapper}
+        components: {NodeWrapper,  HomeElementWrapper, HomeElement},
+        data(){
+            return{
+                newHomeElement: null,
+                stageDrawHomeElement: 'start',
+                drawTypeHomeElement: 'node',
+                drawMove: false, //отображать рисованную фигуру только тогда включил рисование сделал клик и повел
+                startX: null,
+                startY: null,
+            }
+        },
+        computed: {
+            ...mapState('editor', {
+                modeEditor: 'modeEditor',
+                drawTypeElement: 'drawTypeElement',
+                selectFloorId: 'selectFloorId',
+                floors: 'floors'
+            }),
+            drawHomeElement(){
+                return this.modeEditor==='draw'
+            },
+            selectFloor(){
+                return this.floors.find(n=>n.id==this.selectFloorId)
+            }
+        },
+        methods: {
+            ...mapActions('editor', {
+                addHomeElement: 'add_home_element',
+                addNode: 'add_node',
+                unselect: 'unselect',
+                getAllHomeElements: 'get_all_home_elements'
+            }),
+            onMouseMove(e) {
+                //console.log(this.newHomeElement)
+                const x = e.clientX - 390;
+                const y = e.clientY -64;
+
+                if (this.drawHomeElement && this.drawTypeElement==='room') {
+                    this.newHomeElement = {
+                        positionStart: {
+                            x: Math.min(x, this.startX),
+                            y: Math.min(y, this.startY),
+                        },
+                        size: {
+                            width: Math.abs(x - this.startX),
+                            height: Math.abs(y - this.startY),
+                        },
+                        type: 'room',
+                        newElement: true,
+                        id: this.startY,
+                    }
+                }
+            },
+            onClick(e) {
+                const x = e.clientX-390;
+                const y = e.clientY-64;
+                //если стоит галка рисования то рисуем объекты
+                if (this.drawHomeElement){
+                    switch (this.drawTypeElement) {
+                        case 'room' : {
+                            switch (this.stageDrawHomeElement) {
+                                case 'start' :
+                                    this.startX = x
+                                    this.startY = y
+                                    this.newHomeElement = {
+                                        positionStart: {
+                                            x: x,
+                                            y: y,
+                                        }
+                                    }
+                                    this.stageDrawHomeElement = 'end'
+                                    break;
+                                case 'end' :
+                                    this.addHomeElement({
+                                        positionStart: this.newHomeElement.positionStart,
+                                        size: {
+                                            width: Math.abs(x  - this.startX),
+                                            height: Math.abs(y - this.startY),
+                                        },
+                                        type: 'room',
+                                        id: this.startY-43
+                                    })
+                                    this.startX = null;
+                                    this.startY = null;
+                                    this.stageDrawHomeElement = 'start'
+
+                            }
+                            break
+                        }
+                        case 'node' : {
+                            this.addNode({
+                                positionStart: {
+                                    x: x,
+                                    y: y,
+                                }
+                            })
+
+                            break
+                        }
+                    }
+
+                } else { //иначе выбираем их для редактирования
+                    this.unselect()
+                }
+            }
+        },
+        mounted() {
+            this.getAllHomeElements()
+        }
     }
 </script>
 
