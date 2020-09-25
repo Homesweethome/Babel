@@ -102,15 +102,15 @@ namespace Babel.Api.Controllers
         [HttpPut, HttpPost]
         [Route("photo/{id:alpha}")]
         [Consumes("application/octet-stream", "multipart/form-data")]
-        public async Task<IActionResult> SetPhoto(string id, [FromForm] List<IFormFile> images)
+        public async Task<IActionResult> SetPhoto(string id, [FromForm] List<IFormFile> image)
         {
             var room = await _roomService.Get(id);
-            var image = images.FirstOrDefault();
-            if (image != null && image.Length > 0)
+            var image1 = image.FirstOrDefault();
+            if (image1 != null && image1.Length > 0)
             {
                 using (var ms = new MemoryStream())
                 {
-                    image.CopyTo(ms);
+                    image1.CopyTo(ms);
                     var fileBytes = ms.ToArray();
                     string s = Convert.ToBase64String(fileBytes);
                     room.Photo = s;
