@@ -82,7 +82,7 @@
                             width: Math.abs(x - this.startX),
                             height: Math.abs(y - this.startY),
                         },
-                        type: 'room',
+                        type: this.drawTypeElement,
                         newElement: true,
                         id: this.startY,
                     }
@@ -94,7 +94,15 @@
                 //если стоит галка рисования то рисуем объекты
                 if (this.drawHomeElement){
                     switch (this.drawTypeElement) {
-                        case 'room' : {
+                        case 'room' :
+                        case 'wall' :
+                        case 'rack' :
+                        case 'chair' :
+                        case 'placeforread' :
+                        case 'sofa' :
+                        case 'pc' :
+                        case 'mfu' :
+                            {
                             switch (this.stageDrawHomeElement) {
                                 case 'start' :
                                     this.startX = x
@@ -114,7 +122,7 @@
                                             width: Math.abs(x  - this.startX),
                                             height: Math.abs(y - this.startY),
                                         },
-                                        type: 'room',
+                                        type: this.drawTypeElement,
                                         id: this.startY-43
                                     })
                                     this.startX = null;

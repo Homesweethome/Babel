@@ -13,8 +13,20 @@
         </v-btn>
         <v-btn
             @click="addFloor({title: '2', value: 0})"
-        > +
+        > + этаж
         </v-btn>
+        <v-btn>
+            <v-file-input
+                    :rules="rules"
+                    accept="image/png, image/jpeg, image/bmp"
+                    placeholder="План этажа"
+                    prepend-icon="mdi-camera"
+                    id="filesEducation"
+                    ref="filesEducation"
+                    @change="handleFilesEducationUpload"
+            ></v-file-input>
+        </v-btn>
+
     </v-bottom-navigation>
 </template>
 
@@ -24,6 +36,7 @@
         name: "EditorFloors",
         data(){
             return{
+                filesEdu: '',
                 activeBtn: 1,
             }
         },
@@ -37,8 +50,18 @@
             ...mapActions('editor', {
                 setActiveFloor: 'set_active_floor',
                 addFloor: 'add_floor',
-                getFloors: 'get_all_floors'
-            })
+                getFloors: 'get_all_floors',
+                addImage: 'add_image_for_floor'
+            }),
+            handleFilesEducationUpload(files) {
+                let formData = new FormData()
+                for (let i = 0; i < files.length; i++) {
+                    let file = files[i]
+                    formData.append('files', file)
+                }
+                this.filesEdu = formData
+                this.addImage(this.filesEdu)
+            },
         },
         mounted() {
             this.getFloors()

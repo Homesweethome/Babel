@@ -4,8 +4,8 @@ async function getAllHomeElements() {
     return await axios.get('/room')
 }
 
-function setHomeElements(homeElement) {
-    return axios.post('/room', {
+async function setHomeElements(homeElement) {
+    return await  axios.post('/room', {
         level: homeElement.floor,
         type: homeElement.type,
         positionStart: {
@@ -14,7 +14,7 @@ function setHomeElements(homeElement) {
         },
         size: {
             width: homeElement.size.width,
-            height: homeElement.size.width
+            height: homeElement.size.height
         },
         description: homeElement.description,
         name: homeElement.name
@@ -22,7 +22,7 @@ function setHomeElements(homeElement) {
 }
 
 function deleteHomeElement(idHomeElement) {
-    return axios.delete('/room'+idHomeElement)
+    return axios.delete('/room/'+idHomeElement)
 }
 
 async function getFloors() {
@@ -35,10 +35,20 @@ function addFloors(floors) {
         value: floors.value,
     })
 }
+async function addImageFloor(level,data) {
+    return await axios.post('/level/background/'+level,
+        data,
+        {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+}
 export default {
     getAllHomeElements,
     setHomeElements,
     deleteHomeElement,
     addFloors,
-    getFloors
+    getFloors,
+    addImageFloor
 }

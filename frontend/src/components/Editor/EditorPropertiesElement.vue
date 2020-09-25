@@ -17,8 +17,12 @@
                         rows="5"
                         label="Описание"/>
             </v-col>
+            <v-col cols="12">
+                <v-text-field
+                        label="ИД в RUSMARC"/>
+            </v-col>
             <v-subheader>
-                Вложенные объекты
+                Объекты принадлежащие по RUSMARC
             </v-subheader>
             <v-col cols="12">
                 <v-list>
