@@ -72,7 +72,7 @@ namespace Babel.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete]
-        [Route("{id:alpha}")]
+        [Route("{id}")]
         public async Task<IActionResult> RemoveRoom(string id)
         {
             await _roomService.Remove(id);
