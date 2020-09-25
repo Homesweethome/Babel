@@ -24,6 +24,12 @@ namespace Babel.Api.Controllers
             _entityService = entityService;
         }
 
+        /// <summary>
+        /// Получить путь из комнаты в комнату
+        /// </summary>
+        /// <param name="sourceRoomName"></param>
+        /// <param name="targetRoomName"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetPathToRoom(string sourceRoomName, string targetRoomName)
         {

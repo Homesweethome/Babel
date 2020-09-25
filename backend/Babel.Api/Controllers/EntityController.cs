@@ -39,6 +39,11 @@ namespace Babel.Api.Controllers
             return JsonResponse.New(result);
         }
 
+        /// <summary>
+        /// Добавление сущности
+        /// </summary>
+        /// <param name="entityDto"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("")]
         public async Task<IActionResult> AddEntity(EntityDto entityDto)

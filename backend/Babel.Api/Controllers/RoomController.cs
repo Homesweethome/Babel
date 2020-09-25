@@ -19,12 +19,15 @@ namespace Babel.Api.Controllers
     public class RoomController: Controller
     {
         private readonly RoomService _roomService;
+        private readonly LevelService _levelService;
         private readonly IMapper _mapper;
 
         public RoomController(RoomService roomService,
+            LevelService levelService,
             IMapper mapper)
         {
             _roomService = roomService;
+            _levelService = levelService;
             _mapper = mapper;
         }
 
@@ -49,6 +52,10 @@ namespace Babel.Api.Controllers
         [Route("")]
         public async Task<IActionResult> AddRoom(RoomDto room)
         {
+            var level = await _levelService.Get(room.Level);
+            if (level == null)
+                return BadRequest("Попытка добавить на несуществующий этаж");
+
             var baseRoom = _mapper.Map<BaseRoom>(room);
             baseRoom.Id = Guid.NewGuid().ToString();
             var result = await _roomService.Create(baseRoom);
