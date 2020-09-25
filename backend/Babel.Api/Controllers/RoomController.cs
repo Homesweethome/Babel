@@ -40,8 +40,7 @@ namespace Babel.Api.Controllers
         public async Task<IActionResult> GetRooms()
         {
             var converted = _mapper.Map<List<RoomDto>>(await _roomService.Get());
-            var result = JsonSerializer.Serialize(converted);
-            return JsonResponse.New(result);
+            return JsonResponse.New(converted);
         }
 
         /// <summary>

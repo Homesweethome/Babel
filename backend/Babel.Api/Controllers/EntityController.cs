@@ -44,16 +44,18 @@ namespace Babel.Api.Controllers
         }
 
         /// <summary>
-        /// Добавление сущности
+        /// Добавление сущности на этаж
         /// </summary>
+        /// <param name="level"></param>
         /// <param name="entityDto"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("")]
-        public async Task<IActionResult> AddEntity(EntityDto entityDto)
+        [Route("{level:alpha}")]
+        public async Task<IActionResult> AddEntity(string level, EntityDto entityDto)
         {
             var entity = _mapper.Map<Entity>(entityDto);
             entity.Id = Guid.NewGuid().ToString();
+            entity.LevelId = level;
             var result = await _entityService.Create(entity);
 
             return JsonResponse.New(result);
@@ -93,7 +95,16 @@ namespace Babel.Api.Controllers
 
             if (sourceEntity.Type != "stairs" && sourceEntity.Type != "elevator" &&
                 targetEntity.Type != "stairs" && targetEntity.Type != "elevator")
-                return BadRequest("Попытка связать несвязанные сущности");
+                return BadRequest("Попытка связать несвязываемые сущности");
+
+            if (!sourceEntity.BoundEntitiesIds.Contains(targetId))
+                sourceEntity.BoundEntitiesIds.Add(targetId);
+
+            if (!targetEntity.BoundEntitiesIds.Contains(sourceId))
+                targetEntity.BoundEntitiesIds.Add(sourceId);
+
+            await _entityService.Update(sourceId, sourceEntity);
+            await _entityService.Update(targetId, targetEntity);
 
             return JsonResponse.New("ok");
         }
