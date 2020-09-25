@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -101,10 +102,11 @@ namespace Babel.Api.Controllers
         [HttpPut, HttpPost]
         [Route("photo/{id:alpha}")]
         [Consumes("application/octet-stream", "multipart/form-data")]
-        public async Task<IActionResult> SetPhoto(string id, [FromForm] IFormFile image)
+        public async Task<IActionResult> SetPhoto(string id, [FromForm] List<IFormFile> images)
         {
             var room = await _roomService.Get(id);
-            if (image.Length > 0)
+            var image = images.FirstOrDefault();
+            if (image != null && image.Length > 0)
             {
                 using (var ms = new MemoryStream())
                 {
