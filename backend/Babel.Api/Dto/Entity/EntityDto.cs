@@ -14,5 +14,6 @@ namespace Babel.Api.Dto.Entity
         public string Description { get; set; }
         public string BaseId { get; set; }
         public string Type { get; set; }
+        public List<string> BoundEntitiesIds { get; set; }
     }
 }

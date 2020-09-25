@@ -39,7 +39,7 @@ namespace Babel.Api.Controllers
         public async Task<IActionResult> GetLevels()
         {
             var converted = _mapper.Map<List<LevelDto>>(await _levelService.Get());
-            var result = JsonSerializer.Serialize(converted);
+            var result = converted;
             return JsonResponse.New(result);
         }
 

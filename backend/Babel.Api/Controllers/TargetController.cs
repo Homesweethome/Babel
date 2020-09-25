@@ -70,6 +70,22 @@ namespace Babel.Api.Controllers
         }
 
         /// <summary>
+        /// Удалить объект по ид
+        /// </summary>
+        /// <param name="targetId"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("{targetId:alpha}")]
+        public async Task<IActionResult> DeleteTarget(string targetId)
+        {
+            var target = await _targetService.Get(targetId);
+            if (target == null)
+                return NotFound("Не найден объект для удаления");
+            await _targetService.Remove(targetId);
+            return JsonResponse.New("ok");
+        }
+
+        /// <summary>
         /// Обновить поисковые аттрибуты для целевого объекта
         /// </summary>
         /// <param name="targetId"></param>

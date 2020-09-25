@@ -43,7 +43,7 @@ namespace Babel.Api.Controllers
 
             var rooms = await _roomService.Get();
             var doors = await _entityService.GetEntitiesByType("door");
-            var stairs = await _entityService.GetEntitiesByType("stair");
+            var stairs = await _entityService.GetEntitiesByType("stairs");
             var elevators = await _entityService.GetEntitiesByType("elevator");
 
             var graph = new Graph<BaseRoom>();
