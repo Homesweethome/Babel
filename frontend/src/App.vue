@@ -8,10 +8,7 @@
       <router-link class="white--text" to="/">Основной экран</router-link> |
       <router-link class="white--text" to="/editor">Редактор</router-link>
     </v-app-bar>
-
-    <v-main>
       <router-view/>
-    </v-main>
   </v-app>
 </template>
 
