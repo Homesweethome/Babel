@@ -27,7 +27,7 @@ namespace Babel.Db.Services
 
         public async Task<BaseRoom> GetRoomByName(string roomName)
         {
-            var room = (await _collection.FindAsync(x => x.Name.ToLower() == roomName.ToLower())).First();
+            var room = (await _collection.FindAsync(x => x.Name.ToLower() == roomName.ToLower())).FirstOrDefault();
             return room;
         }
     }
