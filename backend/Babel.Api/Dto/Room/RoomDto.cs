@@ -15,5 +15,6 @@ namespace Babel.Api.Dto.Room
         public string Photo { get; set; }
         public string Name { get; set; }
         public List<string> Attributes { get; set; }
+        public string Type { get; set; }
     }
 }

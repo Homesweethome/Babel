@@ -41,7 +41,7 @@ namespace Babel.Api.Controllers
             if (targetRoom == null)
                 return NotFound("Целевая комната не найдена");
 
-            var rooms = await _roomService.Get();
+            var rooms = (await _roomService.Get()).Where(x => x.Type == "room");
             var doors = await _entityService.GetEntitiesByType("door");
             var stairs = await _entityService.GetEntitiesByType("stairs");
             var elevators = await _entityService.GetEntitiesByType("elevator");

@@ -110,7 +110,7 @@ namespace Babel.Api.Controllers
         /// <summary>
         /// Обновить поисковые аттрибуты для комнаты
         /// </summary>
-        /// <param name="targetId"></param>
+        /// <param name="roomId"></param>
         /// <param name="attributes"></param>
         /// <returns></returns>
         [HttpPut]

@@ -29,7 +29,6 @@ namespace Babel.Api.Extensions
                 .AddSingleton<EntityService>()
                 .AddSingleton<LevelService>()
                 .AddSingleton<EntityTypeService>()
-                .AddSingleton<TargetService>()
 
 
                 ;
