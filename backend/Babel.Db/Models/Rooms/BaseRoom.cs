@@ -10,5 +10,6 @@ namespace Babel.Db.Models.Rooms
         public Size Size { get; set; }
         public string Photo { get; set; }
         public string Name { get; set; }
+        public string Attributes { get; set; }
     }
 }

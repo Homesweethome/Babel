@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Babel.Api.Base;
 using Babel.Api.Dto.Room;
+using Babel.Api.Extensions;
 using Babel.Db.Models.Rooms;
 using Babel.Db.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -86,10 +87,24 @@ namespace Babel.Api.Controllers
         [Route("{id:alpha}")]
         public async Task<IActionResult> UpdateRoom(string id, RoomDto room)
         {
-            var baseRoom = _mapper.Map<BaseRoom>(room);
+            var baseRoom = await _roomService.Get(id);
+            baseRoom.CopyProperties(room);
+            baseRoom.Id = id;
             await _roomService.Update(id, baseRoom);
+            return JsonResponse.New(_mapper.Map<RoomDto>(baseRoom));
+        }
 
-            return null;
+        /// <summary>
+        /// Указать фотографию для комнаты
+        /// </summary>
+        [HttpPut, HttpPost]
+        [Route("photo/{id:alpha}")]
+        public async Task<IActionResult> SetPhoto(string id, string photo)
+        {
+            var room = await _roomService.Get(id);
+            room.Photo = photo;
+            await _roomService.Update(id, room);
+            return JsonResponse.New(_mapper.Map<RoomDto>(room));
         }
     }
 }
