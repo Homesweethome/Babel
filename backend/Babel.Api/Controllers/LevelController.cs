@@ -87,18 +87,18 @@ namespace Babel.Api.Controllers
         [HttpPost, HttpPut]
         [Route("background/{levelId:alpha}")]
         [Consumes("application/octet-stream", "multipart/form-data")]
-        public async Task<IActionResult> SetBackground(string levelId, [FromForm] List<IFormFile> image)
+        public async Task<IActionResult> SetBackground(string levelId, [FromForm] List<IFormFile> files)
         {
             var level = await _levelService.Get(levelId);
             if (level == null)
                 return NotFound();
 
-            var image1 = image.FirstOrDefault();
-            if (image1 != null && image1.Length > 0)
+            var image = files.FirstOrDefault();
+            if (image != null && image.Length > 0)
             {
                 using (var ms = new MemoryStream())
                 {
-                    image1.CopyTo(ms);
+                    image.CopyTo(ms);
                     var fileBytes = ms.ToArray();
                     string s = Convert.ToBase64String(fileBytes);
                     level.Image = s;
