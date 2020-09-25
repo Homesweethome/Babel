@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Babel.Api.Base;
 using Babel.Api.Graph;
 using Babel.Db.Base;
 using Babel.Db.Models.Entities;
@@ -46,6 +47,7 @@ namespace Babel.Api.Controllers
             var stairs = await _entityService.GetEntitiesByType("stairs");
             var elevators = await _entityService.GetEntitiesByType("elevator");
 
+            // строим граф соединений всех комнат
             var graph = new Graph<BaseRoom>();
             foreach (var baseRoom in rooms)
             {
@@ -54,14 +56,36 @@ namespace Babel.Api.Controllers
 
             foreach (var door in doors)
             {
+                List<BaseRoom> allIntersectedRooms = new List<BaseRoom>();
                 foreach (var room in rooms)
                 {
                     bool doesIntersects = DoesIntersects(door, room);
+                    if (doesIntersects)
+                        allIntersectedRooms.Add(room);
+                }
+
+                if (allIntersectedRooms.Count > 1)
+                {
+                    for (int i = 0; i < allIntersectedRooms.Count; i++)
+                    {
+                        for (int j = 0; j < allIntersectedRooms.Count; j++)
+                        {
+                            if (i == j)
+                                continue;
+                            graph.AddEdge(new Tuple<BaseRoom, BaseRoom>(allIntersectedRooms[i], allIntersectedRooms[j]));
+                        }
+                    }
                 }
             }
 
+            var bfsAlgo = new GraphBfsAlgorithm();
+            var shortestPathFunc = bfsAlgo.ShortestPathFunction(graph, sourceRoom);
+            var shortestPath = shortestPathFunc(targetRoom);
 
-            return null;
+            var result = shortestPath.Select(x => x.Name);
+
+
+            return JsonResponse.New(result);
         }
 
         private bool DoesIntersects(Entity door, BaseRoom room)

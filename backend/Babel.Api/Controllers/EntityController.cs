@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using Babel.Api.Base;
 using Babel.Api.Dto.Entity;
+using Babel.Api.Dto.Room;
 using Babel.Db.Models.Entities;
 using Babel.Db.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Babel.Api.Controllers
@@ -33,7 +37,7 @@ namespace Babel.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("{level:alpha}")]
+        [Route("{level}")]
         public async Task<IActionResult> GetEntities(string level)
         {
             var entities = await _entityService.GetEntitiesByLevel(level);
@@ -50,7 +54,7 @@ namespace Babel.Api.Controllers
         /// <param name="entityDto"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("{level:alpha}")]
+        [Route("{level}")]
         public async Task<IActionResult> AddEntity(string level, EntityDto entityDto)
         {
             var entity = _mapper.Map<Entity>(entityDto);
@@ -67,7 +71,7 @@ namespace Babel.Api.Controllers
         /// <param name="entityId"></param>
         /// <returns></returns>
         [HttpDelete]
-        [Route("{entityId:alpha}")]
+        [Route("{entityId}")]
         public async Task<IActionResult> DeleteEntity(string entityId)
         {
             var entity = await _entityService.Get(entityId);
@@ -81,7 +85,7 @@ namespace Babel.Api.Controllers
         /// Связать проходимую сущность с другой сущностью
         /// </summary>
         [HttpPost]
-        [Route("bind/{sourceId:alpha}")]
+        [Route("bind/{sourceId}")]
         public async Task<IActionResult> BindEntity(string sourceId, string targetId)
         {
             var sourceEntity = await _entityService.Get(sourceId);
@@ -107,6 +111,30 @@ namespace Babel.Api.Controllers
             await _entityService.Update(targetId, targetEntity);
 
             return JsonResponse.New("ok");
+        }
+
+        /// <summary>
+        /// Указать фотографию для комнаты
+        /// </summary>
+        [HttpPut, HttpPost]
+        [Route("photo/{id}")]
+        [Consumes("application/octet-stream", "multipart/form-data")]
+        public async Task<IActionResult> SetPhoto(string id, [FromForm] List<IFormFile> files)
+        {
+            var entity = await _entityService.Get(id);
+            var image = files.FirstOrDefault();
+            if (image != null && image.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    image.CopyTo(ms);
+                    var fileBytes = ms.ToArray();
+                    string s = Convert.ToBase64String(fileBytes);
+                    entity.Photo = s;
+                }
+            }
+            await _entityService.Update(id, entity);
+            return JsonResponse.New(_mapper.Map<EntityDto>(entity));
         }
     }
 }

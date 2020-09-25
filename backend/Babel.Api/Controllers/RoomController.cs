@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -8,6 +10,7 @@ using Babel.Api.Dto.Room;
 using Babel.Api.Extensions;
 using Babel.Db.Models.Rooms;
 using Babel.Db.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Babel.Api.Controllers
@@ -69,7 +72,7 @@ namespace Babel.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete]
-        [Route("{id:alpha}")]
+        [Route("{id}")]
         public async Task<IActionResult> RemoveRoom(string id)
         {
             await _roomService.Remove(id);
@@ -83,7 +86,7 @@ namespace Babel.Api.Controllers
         /// <param name="room"></param>
         /// <returns></returns>
         [HttpPut, HttpPost]
-        [Route("{id:alpha}")]
+        [Route("{id}")]
         public async Task<IActionResult> UpdateRoom(string id, RoomDto room)
         {
             var baseRoom = await _roomService.Get(id);
@@ -97,11 +100,22 @@ namespace Babel.Api.Controllers
         /// Указать фотографию для комнаты
         /// </summary>
         [HttpPut, HttpPost]
-        [Route("photo/{id:alpha}")]
-        public async Task<IActionResult> SetPhoto(string id, string photo)
+        [Route("photo/{id}")]
+        [Consumes("application/octet-stream", "multipart/form-data")]
+        public async Task<IActionResult> SetPhoto(string id, [FromForm] List<IFormFile> files)
         {
             var room = await _roomService.Get(id);
-            room.Photo = photo;
+            var image = files.FirstOrDefault();
+            if (image != null && image.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    image.CopyTo(ms);
+                    var fileBytes = ms.ToArray();
+                    string s = Convert.ToBase64String(fileBytes);
+                    room.Photo = s;
+                }
+            }
             await _roomService.Update(id, room);
             return JsonResponse.New(_mapper.Map<RoomDto>(room));
         }
@@ -114,7 +128,7 @@ namespace Babel.Api.Controllers
         /// <param name="attributes"></param>
         /// <returns></returns>
         [HttpPut]
-        [Route("changeattributes/{targetId:alpha}")]
+        [Route("changeattributes/{roomId}")]
         public async Task<IActionResult> UpdateAttributes(string roomId, List<string> attributes)
         {
             var room = await _roomService.Get(roomId);
