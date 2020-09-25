@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Babel.Api.Controllers
 {
+    [ApiController]
+    [Route("path")]
     public class PathController: ControllerBase
     {
         private readonly RoomService _roomService;
@@ -22,6 +24,13 @@ namespace Babel.Api.Controllers
             _entityService = entityService;
         }
 
+        /// <summary>
+        /// Получить путь из комнаты в комнату
+        /// </summary>
+        /// <param name="sourceRoomName"></param>
+        /// <param name="targetRoomName"></param>
+        /// <returns></returns>
+        [HttpGet]
         public async Task<IActionResult> GetPathToRoom(string sourceRoomName, string targetRoomName)
         {
             var sourceRoom = await _roomService.GetRoomByName(sourceRoomName);
@@ -32,9 +41,9 @@ namespace Babel.Api.Controllers
             if (targetRoom == null)
                 return NotFound("Целевая комната не найдена");
 
-            var rooms = await _roomService.Get();
+            var rooms = (await _roomService.Get()).Where(x => x.Type == "room");
             var doors = await _entityService.GetEntitiesByType("door");
-            var stairs = await _entityService.GetEntitiesByType("stair");
+            var stairs = await _entityService.GetEntitiesByType("stairs");
             var elevators = await _entityService.GetEntitiesByType("elevator");
 
             var graph = new Graph<BaseRoom>();

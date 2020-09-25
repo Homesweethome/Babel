@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Babel.Api.Base;
 using Babel.Api.Dto.Room;
+using Babel.Api.Extensions;
 using Babel.Db.Models.Rooms;
 using Babel.Db.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +20,15 @@ namespace Babel.Api.Controllers
     public class RoomController: Controller
     {
         private readonly RoomService _roomService;
+        private readonly LevelService _levelService;
         private readonly IMapper _mapper;
 
         public RoomController(RoomService roomService,
+            LevelService levelService,
             IMapper mapper)
         {
             _roomService = roomService;
+            _levelService = levelService;
             _mapper = mapper;
         }
 
@@ -36,8 +40,7 @@ namespace Babel.Api.Controllers
         public async Task<IActionResult> GetRooms()
         {
             var converted = _mapper.Map<List<RoomDto>>(await _roomService.Get());
-            var result = JsonSerializer.Serialize(converted);
-            return JsonResponse.New(result);
+            return JsonResponse.New(converted);
         }
 
         /// <summary>
@@ -49,6 +52,10 @@ namespace Babel.Api.Controllers
         [Route("")]
         public async Task<IActionResult> AddRoom(RoomDto room)
         {
+            var level = await _levelService.Get(room.Level);
+            if (level == null)
+                return BadRequest("Попытка добавить на несуществующий этаж");
+
             var baseRoom = _mapper.Map<BaseRoom>(room);
             baseRoom.Id = Guid.NewGuid().ToString();
             var result = await _roomService.Create(baseRoom);
@@ -79,10 +86,46 @@ namespace Babel.Api.Controllers
         [Route("{id:alpha}")]
         public async Task<IActionResult> UpdateRoom(string id, RoomDto room)
         {
-            var baseRoom = _mapper.Map<BaseRoom>(room);
+            var baseRoom = await _roomService.Get(id);
+            baseRoom.CopyProperties(room);
+            baseRoom.Id = id;
             await _roomService.Update(id, baseRoom);
+            return JsonResponse.New(_mapper.Map<RoomDto>(baseRoom));
+        }
 
-            return null;
+        /// <summary>
+        /// Указать фотографию для комнаты
+        /// </summary>
+        [HttpPut, HttpPost]
+        [Route("photo/{id:alpha}")]
+        public async Task<IActionResult> SetPhoto(string id, string photo)
+        {
+            var room = await _roomService.Get(id);
+            room.Photo = photo;
+            await _roomService.Update(id, room);
+            return JsonResponse.New(_mapper.Map<RoomDto>(room));
+        }
+
+
+        /// <summary>
+        /// Обновить поисковые аттрибуты для комнаты
+        /// </summary>
+        /// <param name="roomId"></param>
+        /// <param name="attributes"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("changeattributes/{targetId:alpha}")]
+        public async Task<IActionResult> UpdateAttributes(string roomId, List<string> attributes)
+        {
+            var room = await _roomService.Get(roomId);
+            if (room == null)
+                return BadRequest("Нечему менять аттрибуты");
+
+            room.Attributes = attributes;
+
+            await _roomService.Update(roomId, room);
+
+            return JsonResponse.New(room);
         }
     }
 }

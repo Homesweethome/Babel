@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Babel.Api.Controllers
 {
+    [ApiController]
+    [Route("level")]
     public class LevelController: ControllerBase
     {
         private readonly RoomService _roomService;
@@ -28,15 +30,24 @@ namespace Babel.Api.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Получить список этажей
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetLevels()
         {
             var converted = _mapper.Map<List<LevelDto>>(await _levelService.Get());
-            var result = JsonSerializer.Serialize(converted);
+            var result = converted;
             return JsonResponse.New(result);
         }
 
+        /// <summary>
+        /// Добавить этаж
+        /// </summary>
+        /// <param name="levelDto"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("")]
         public async Task<IActionResult> AddLevel(LevelDto levelDto)
@@ -48,8 +59,13 @@ namespace Babel.Api.Controllers
             return JsonResponse.New(_mapper.Map<LevelDto>(result));
         }
 
+        /// <summary>
+        /// Удалить этаж
+        /// </summary>
+        /// <param name="levelId"></param>
+        /// <returns></returns>
         [HttpDelete]
-        [Route("levelId:alpha")]
+        [Route("{levelId:alpha}")]
         public async Task<IActionResult> RemoveLevel(string levelId)
         {
             var level = await _levelService.Get(levelId);
@@ -60,6 +76,12 @@ namespace Babel.Api.Controllers
             return JsonResponse.New("ok");
         }
 
+        /// <summary>
+        /// Задать фон для этажа
+        /// </summary>
+        /// <param name="levelId"></param>
+        /// <param name="image"></param>
+        /// <returns></returns>
         [HttpPost, HttpPut]
         [Route("background/{levelId:alpha}")]
         public async Task<IActionResult> SetBackground(string levelId, string image)
@@ -72,6 +94,11 @@ namespace Babel.Api.Controllers
             return JsonResponse.New(level);
         }
 
+        /// <summary>
+        /// Удалить фон для этажа
+        /// </summary>
+        /// <param name="levelId"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("background/{levelId:alpha}")]
         public async Task<IActionResult> DeleteBackground(string levelId)

@@ -1,4 +1,5 @@
-﻿using Babel.Db.Base;
+﻿using System.Collections.Generic;
+using Babel.Db.Base;
 
 namespace Babel.Db.Models.Entities
 {
@@ -10,5 +11,6 @@ namespace Babel.Db.Models.Entities
         public string Type { get; set; }
         public string Photo { get; set; }
         public string LevelId { get; set; }
+        public List<string> BoundEntitiesIds { get; set; }
     }
 }

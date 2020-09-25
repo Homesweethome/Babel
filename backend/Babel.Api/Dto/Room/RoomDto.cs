@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using Babel.Db.Models.Rooms;
 
 namespace Babel.Api.Dto.Room
@@ -13,5 +14,7 @@ namespace Babel.Api.Dto.Room
         public string Description { get; set; }
         public string Photo { get; set; }
         public string Name { get; set; }
+        public List<string> Attributes { get; set; }
+        public string Type { get; set; }
     }
 }
