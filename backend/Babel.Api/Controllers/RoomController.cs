@@ -105,5 +105,27 @@ namespace Babel.Api.Controllers
             await _roomService.Update(id, room);
             return JsonResponse.New(_mapper.Map<RoomDto>(room));
         }
+
+
+        /// <summary>
+        /// Обновить поисковые аттрибуты для комнаты
+        /// </summary>
+        /// <param name="targetId"></param>
+        /// <param name="attributes"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("changeattributes/{targetId:alpha}")]
+        public async Task<IActionResult> UpdateAttributes(string roomId, List<string> attributes)
+        {
+            var room = await _roomService.Get(roomId);
+            if (room == null)
+                return BadRequest("Нечему менять аттрибуты");
+
+            room.Attributes = attributes;
+
+            await _roomService.Update(roomId, room);
+
+            return JsonResponse.New(room);
+        }
     }
 }

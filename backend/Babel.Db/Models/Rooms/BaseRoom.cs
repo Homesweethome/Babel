@@ -1,4 +1,5 @@
-﻿using Babel.Db.Base;
+﻿using System.Collections.Generic;
+using Babel.Db.Base;
 
 namespace Babel.Db.Models.Rooms
 {
@@ -10,6 +11,6 @@ namespace Babel.Db.Models.Rooms
         public Size Size { get; set; }
         public string Photo { get; set; }
         public string Name { get; set; }
-        public string Attributes { get; set; }
+        public List<string> Attributes { get; set; }
     }
 }
