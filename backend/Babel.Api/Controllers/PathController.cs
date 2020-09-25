@@ -24,6 +24,7 @@ namespace Babel.Api.Controllers
             _entityService = entityService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetPathToRoom(string sourceRoomName, string targetRoomName)
         {
             var sourceRoom = await _roomService.GetRoomByName(sourceRoomName);
