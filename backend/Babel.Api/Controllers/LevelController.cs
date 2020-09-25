@@ -82,7 +82,7 @@ namespace Babel.Api.Controllers
         /// Задать фон для этажа
         /// </summary>
         /// <param name="levelId"></param>
-        /// <param name="image"></param>
+        /// <param name="files"></param>
         /// <returns></returns>
         [HttpPost, HttpPut]
         [Route("background/{levelId:alpha}")]

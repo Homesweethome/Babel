@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using Babel.Api.Base;
 using Babel.Api.Dto.Entity;
+using Babel.Api.Dto.Room;
 using Babel.Db.Models.Entities;
 using Babel.Db.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Babel.Api.Controllers
@@ -107,6 +111,30 @@ namespace Babel.Api.Controllers
             await _entityService.Update(targetId, targetEntity);
 
             return JsonResponse.New("ok");
+        }
+
+        /// <summary>
+        /// Указать фотографию для комнаты
+        /// </summary>
+        [HttpPut, HttpPost]
+        [Route("photo/{id:alpha}")]
+        [Consumes("application/octet-stream", "multipart/form-data")]
+        public async Task<IActionResult> SetPhoto(string id, [FromForm] List<IFormFile> files)
+        {
+            var entity = await _entityService.Get(id);
+            var image = files.FirstOrDefault();
+            if (image != null && image.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    image.CopyTo(ms);
+                    var fileBytes = ms.ToArray();
+                    string s = Convert.ToBase64String(fileBytes);
+                    entity.Photo = s;
+                }
+            }
+            await _entityService.Update(id, entity);
+            return JsonResponse.New(_mapper.Map<EntityDto>(entity));
         }
     }
 }
