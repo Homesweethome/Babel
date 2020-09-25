@@ -86,7 +86,7 @@ namespace Babel.Api.Controllers
         /// <param name="room"></param>
         /// <returns></returns>
         [HttpPut, HttpPost]
-        [Route("{id:alpha}")]
+        [Route("{id}")]
         public async Task<IActionResult> UpdateRoom(string id, RoomDto room)
         {
             var baseRoom = await _roomService.Get(id);
@@ -100,7 +100,7 @@ namespace Babel.Api.Controllers
         /// Указать фотографию для комнаты
         /// </summary>
         [HttpPut, HttpPost]
-        [Route("photo/{id:alpha}")]
+        [Route("photo/{id}")]
         [Consumes("application/octet-stream", "multipart/form-data")]
         public async Task<IActionResult> SetPhoto(string id, [FromForm] List<IFormFile> files)
         {
@@ -128,7 +128,7 @@ namespace Babel.Api.Controllers
         /// <param name="attributes"></param>
         /// <returns></returns>
         [HttpPut]
-        [Route("changeattributes/{targetId:alpha}")]
+        [Route("changeattributes/{roomId}")]
         public async Task<IActionResult> UpdateAttributes(string roomId, List<string> attributes)
         {
             var room = await _roomService.Get(roomId);

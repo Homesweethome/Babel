@@ -37,7 +37,7 @@ namespace Babel.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("{level:alpha}")]
+        [Route("{level}")]
         public async Task<IActionResult> GetEntities(string level)
         {
             var entities = await _entityService.GetEntitiesByLevel(level);
@@ -54,7 +54,7 @@ namespace Babel.Api.Controllers
         /// <param name="entityDto"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("{level:alpha}")]
+        [Route("{level}")]
         public async Task<IActionResult> AddEntity(string level, EntityDto entityDto)
         {
             var entity = _mapper.Map<Entity>(entityDto);
@@ -71,7 +71,7 @@ namespace Babel.Api.Controllers
         /// <param name="entityId"></param>
         /// <returns></returns>
         [HttpDelete]
-        [Route("{entityId:alpha}")]
+        [Route("{entityId}")]
         public async Task<IActionResult> DeleteEntity(string entityId)
         {
             var entity = await _entityService.Get(entityId);
@@ -85,7 +85,7 @@ namespace Babel.Api.Controllers
         /// Связать проходимую сущность с другой сущностью
         /// </summary>
         [HttpPost]
-        [Route("bind/{sourceId:alpha}")]
+        [Route("bind/{sourceId}")]
         public async Task<IActionResult> BindEntity(string sourceId, string targetId)
         {
             var sourceEntity = await _entityService.Get(sourceId);
@@ -117,7 +117,7 @@ namespace Babel.Api.Controllers
         /// Указать фотографию для комнаты
         /// </summary>
         [HttpPut, HttpPost]
-        [Route("photo/{id:alpha}")]
+        [Route("photo/{id}")]
         [Consumes("application/octet-stream", "multipart/form-data")]
         public async Task<IActionResult> SetPhoto(string id, [FromForm] List<IFormFile> files)
         {

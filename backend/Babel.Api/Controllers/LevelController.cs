@@ -67,7 +67,7 @@ namespace Babel.Api.Controllers
         /// <param name="levelId"></param>
         /// <returns></returns>
         [HttpDelete]
-        [Route("{levelId:alpha}")]
+        [Route("{levelId}")]
         public async Task<IActionResult> RemoveLevel(string levelId)
         {
             var level = await _levelService.Get(levelId);
@@ -85,7 +85,7 @@ namespace Babel.Api.Controllers
         /// <param name="files"></param>
         /// <returns></returns>
         [HttpPost, HttpPut]
-        [Route("background/{levelId:alpha}")]
+        [Route("background/{levelId}")]
         [Consumes("application/octet-stream", "multipart/form-data")]
         public async Task<IActionResult> SetBackground(string levelId, [FromForm] List<IFormFile> files)
         {
@@ -116,7 +116,7 @@ namespace Babel.Api.Controllers
         /// <param name="levelId"></param>
         /// <returns></returns>
         [HttpDelete]
-        [Route("background/{levelId:alpha}")]
+        [Route("background/{levelId}")]
         public async Task<IActionResult> DeleteBackground(string levelId)
         {
             var level = await _levelService.Get(levelId);
