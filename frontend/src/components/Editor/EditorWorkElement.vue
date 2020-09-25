@@ -40,7 +40,7 @@
                     </v-list-item-content>
                 </v-list-item>
                 <v-subheader>
-                    Тарги
+                    Элементы переходов
                 </v-subheader>
                 <v-divider />
                 <v-list-item
@@ -146,11 +146,6 @@
                         title: 'Лифт',
                         icon: 'devices',
                         value: 'elevator'
-                    },
-                    {
-                        title: 'Окно',
-                        icon: 'developer_board',
-                        value: 'window'
                     }
                 ]
             }
