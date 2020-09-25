@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Babel.Api.Dto;
 using Babel.Api.Dto.Room;
 using Babel.Db.Models;
 using Babel.Db.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Babel.Api.Controllers
@@ -84,12 +86,25 @@ namespace Babel.Api.Controllers
         /// <returns></returns>
         [HttpPost, HttpPut]
         [Route("background/{levelId:alpha}")]
-        public async Task<IActionResult> SetBackground(string levelId, string image)
+        [Consumes("application/octet-stream", "multipart/form-data")]
+        public async Task<IActionResult> SetBackground(string levelId, [FromForm] IFormFile image)
         {
             var level = await _levelService.Get(levelId);
             if (level == null)
                 return NotFound();
-            level.Image = image;
+
+            if (image.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    image.CopyTo(ms);
+                    var fileBytes = ms.ToArray();
+                    string s = Convert.ToBase64String(fileBytes);
+                    level.Image = s;
+                }
+            }
+
+
             await _levelService.Update(levelId, level);
             return JsonResponse.New(level);
         }

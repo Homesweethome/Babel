@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -8,6 +9,7 @@ using Babel.Api.Dto.Room;
 using Babel.Api.Extensions;
 using Babel.Db.Models.Rooms;
 using Babel.Db.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Babel.Api.Controllers
@@ -98,10 +100,20 @@ namespace Babel.Api.Controllers
         /// </summary>
         [HttpPut, HttpPost]
         [Route("photo/{id:alpha}")]
-        public async Task<IActionResult> SetPhoto(string id, string photo)
+        [Consumes("application/octet-stream", "multipart/form-data")]
+        public async Task<IActionResult> SetPhoto(string id, [FromForm] IFormFile image)
         {
             var room = await _roomService.Get(id);
-            room.Photo = photo;
+            if (image.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    image.CopyTo(ms);
+                    var fileBytes = ms.ToArray();
+                    string s = Convert.ToBase64String(fileBytes);
+                    room.Photo = s;
+                }
+            }
             await _roomService.Update(id, room);
             return JsonResponse.New(_mapper.Map<RoomDto>(room));
         }
