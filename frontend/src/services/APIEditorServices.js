@@ -89,7 +89,7 @@ async function addNode(data) {
     return await axios.delete('/entity/'+id)
  }
 async function getBooks(id, au) {
-    return await axios.post('http://poisk.ngonb.ru/opacg.integration.smev/STORAGE/opacfindd/FindView/2.3.0', {
+    return await axios.post('/book/find', {
         iddb: '4',
         ID: id,
         AU: au,
@@ -97,6 +97,7 @@ async function getBooks(id, au) {
         PY: '',
         PU: '',
         PP: '',
+        RUSMARC: ''
     })
 }
 export default {

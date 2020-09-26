@@ -5,7 +5,7 @@
                 <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
                 <h3>{{modeEditorText}}</h3>
                 <v-spacer/>
-                <editor-floors />
+                <editor-floors show-btn-edit="true" />
             </v-app-bar>
             <v-navigation-drawer
                     v-model="drawer"
