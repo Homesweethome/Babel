@@ -17,6 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String KEY_PATH_TO_SCHEMA = "path_to_schema";
 
     /*city*/
+    public static final String TABLE_CITY = "city";
     public static final String KEY_ID_CITY = "_id";
     public static final String KEY_NAME_CITY = "name_city";
     public static final String KEY_NL = "nl";
@@ -124,6 +125,19 @@ public class DBHelper extends SQLiteOpenHelper {
                 "    ssid          VARCHAR (250) DEFAULT [not ssid],\n" +
                 "    level         DECIMAL       DEFAULT (0) \n" +
                 ");\n");
+
+        db.execSQL("INSERT INTO city (\n" +
+                "                     name_city\n" +
+                "                 )\n" +
+                "                 VALUES (\n" +
+                "                     'Алтайский край, город Рубцовск'\n" +
+                "                 );\n");
+        db.execSQL("INSERT INTO city (\n" +
+                "                     name_city\n" +
+                "                 )\n" +
+                "                 VALUES (\n" +
+                "                     'город Новосибирск'\n" +
+                "                 );\n");
     }
 
     @Override
