@@ -49,6 +49,31 @@ namespace Babel.Api.Controllers
         }
 
         /// <summary>
+        /// Проложить маршрут до книги
+        /// </summary>
+        /// <param name="sourceRoomName"></param>
+        /// <param name="bookId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("pathtobook")]
+        public async Task<IActionResult> GetPathToBook(string sourceRoomName, string bookId)
+        {
+            var fundName = await _ngonbLibraryService.SearchById(bookId);
+            if (string.IsNullOrEmpty(fundName))
+                return NotFound("Не удалось найти зал для книги " + bookId);
+
+            var sourceRoom = await _roomService.Get(sourceRoomName);
+            var targetRoom = await _roomService.GetRoomByName(fundName);
+
+            if (sourceRoom == null)
+                return NotFound("Исходная комната не найдена");
+            if (targetRoom == null)
+                return NotFound("Целевая комната не найдена");
+
+            return await PathToRoom(sourceRoom, targetRoom);
+        }
+
+        /// <summary>
         /// Получить путь из комнаты в комнату
         /// </summary>
         /// <param name="sourceRoomName"></param>
@@ -70,6 +95,11 @@ namespace Babel.Api.Controllers
             if (targetRoom == null)
                 return NotFound("Целевая комната не найдена");
 
+            return await PathToRoom(sourceRoom, targetRoom);
+        }
+
+        private async Task<IActionResult> PathToRoom(BaseRoom sourceRoom, BaseRoom targetRoom)
+        {
             var rooms = (await _roomService.Get()).Where(x => x.Type == "room");
             var doors = await _entityService.GetEntitiesByType("door");
             var stairs = await _entityService.GetEntitiesByType("stairs");
@@ -85,7 +115,7 @@ namespace Babel.Api.Controllers
             foreach (var door in doors) // потом добавим все двери
             {
                 graph.AddVertex(door);
-                foreach (var room in rooms)     // и посмотрим, если дверь пересекается с комнатой, то добавим грань
+                foreach (var room in rooms) // и посмотрим, если дверь пересекается с комнатой, то добавим грань
                 {
                     bool doesIntersects = DoesIntersects(door, room);
                     if (doesIntersects)
@@ -103,8 +133,8 @@ namespace Babel.Api.Controllers
                 var shortestPath = shortestPathFunc(rooms.First(x => x.Id == targetRoom.Id));
 
                 var result = string.Join(" ",
-                    shortestPath.Select(x => Math.Floor(x.Position.X + (x.Size == null ? 10 : x.Size.Width / 2)) + ","
-                        + Math.Floor(x.Position.Y + (x.Size == null ? 10 : x.Size.Height / 2))));
+                    shortestPath.Select(x => Math.Floor(x.Position.X + (x.Size == null ? 0 : x.Size.Width / 2)) + ","
+                        + Math.Floor(x.Position.Y + (x.Size == null ? 0 : x.Size.Height / 2))));
 
                 return JsonResponse.New(result);
             }
@@ -112,6 +142,7 @@ namespace Babel.Api.Controllers
             {
                 return BadRequest("Не удалось построить маршрут");
             }
+
             return BadRequest("Не удалось построить маршрут");
         }
 
