@@ -48,7 +48,7 @@
             <span>этаж</span>
         </v-btn>
         <v-btn
-                @click="addFloor({title: '2', value: 0})"
+                @click="addFloor({title: '3', value: 0})"
         > + этаж
         </v-btn>
         <v-btn>
