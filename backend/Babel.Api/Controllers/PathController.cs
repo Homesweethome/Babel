@@ -40,7 +40,7 @@ namespace Babel.Api.Controllers
             try
             {
                 var result = await _ngonbLibraryService.SearchById(bookId);
-                return JsonResponse.New(result)
+                return JsonResponse.New(result);
             }
             catch (Exception e)
             {
@@ -103,7 +103,8 @@ namespace Babel.Api.Controllers
                 var shortestPath = shortestPathFunc(rooms.First(x => x.Id == targetRoom.Id));
 
                 var result = string.Join(" ",
-                    shortestPath.Select(x => x.Position.X + x.Size.Width / 2 + "," + x.Position.Y + x.Size.Height / 2));
+                    shortestPath.Select(x => Math.Floor(x.Position.X + (x.Size == null ? 10 : x.Size.Width / 2)) + ","
+                        + Math.Floor(x.Position.Y + (x.Size == null ? 10 : x.Size.Height / 2))));
 
                 return JsonResponse.New(result);
             }

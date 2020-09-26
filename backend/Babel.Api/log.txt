@@ -323,3 +323,7 @@ System.InvalidOperationException: Unable to resolve service for type 'Babel.Api.
 2020-09-26 20:20:08.316 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
 2020-09-26 20:21:12.132 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
 2020-09-26 20:21:54.643 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2020-09-26 20:29:54.890 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2020-09-26 20:31:49.167 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2020-09-26 20:33:16.770 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2020-09-26 20:34:13.851 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
