@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "bable";
 
     /*types_of_ premises*/
@@ -145,43 +145,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("PRAGMA foreign_keys = 0;\n" +
-                "\n" +
-                "CREATE TABLE sqlitestudio_temp_table AS SELECT *\n" +
-                "                                          FROM institut_of_culture;\n" +
-                "\n" +
-                "DROP TABLE institut_of_culture;\n" +
-                "\n" +
-                "CREATE TABLE institut_of_culture (\n" +
-                "    _id                   INTEGER       PRIMARY KEY ON CONFLICT ROLLBACK AUTOINCREMENT\n" +
-                "                                        UNIQUE ON CONFLICT ROLLBACK\n" +
-                "                                        NOT NULL,\n" +
-                "    name_of_institute     VARCHAR (250) NOT NULL ON CONFLICT ROLLBACK,\n" +
-                "    path_to_image         VARCHAR (250) DEFAULT [not img],\n" +
-                "    idcity                INTEGER       REFERENCES city (_id) ON DELETE SET NULL\n" +
-                "                                                              ON UPDATE CASCADE,\n" +
-                "    idtype_of_institution INTEGER       REFERENCES type_of_institution (_id) ON DELETE SET NULL\n" +
-                "                                                                             ON UPDATE CASCADE,\n" +
-                "    address_inst_cultur   VARCHAR (300) \n" +
-                ");\n" +
-                "\n" +
-                "INSERT INTO institut_of_culture (\n" +
-                "                                    _id,\n" +
-                "                                    name_of_institute,\n" +
-                "                                    path_to_image,\n" +
-                "                                    idcity,\n" +
-                "                                    idtype_of_institution\n" +
-                "                                )\n" +
-                "                                SELECT _id,\n" +
-                "                                       name_of_institute,\n" +
-                "                                       path_to_image,\n" +
-                "                                       idcity,\n" +
-                "                                       idtype_of_institution\n" +
-                "                                  FROM sqlitestudio_temp_table;\n" +
-                "\n" +
-                "DROP TABLE sqlitestudio_temp_table;\n" +
-                "\n" +
-                "PRAGMA foreign_keys = 1;\n");
+        sqLiteDatabase.execSQL("Drop table if exits institut_of_culture");
+
+        sqLiteDatabase.execSQL("CREATE TABLE institut_of_culture _id  INTEGER PRIMARY KEY ON CONFLICT ROLLBACK AUTOINCREMENT UNIQUE ON CONFLICT ROLLBACK  NOT NULL, " +
+                " name_of_institute VARCHAR (250) NOT NULL ON CONFLICT ROLLBACK, address_inst_cultur VARCHAR (250) NOT NULL ON CONFLICT ROLLBACK, path_to_image VARCHAR (250) DEFAULT [not img], " +
+                " idcity  INTEGER REFERENCES city (_id) ON DELETE SET NULL  ON UPDATE CASCADE, idtype_of_institution INTEGER  REFERENCES type_of_institution (_id) ON DELETE SET NULL ON UPDATE CASCADE");
 
 
         sqLiteDatabase.execSQL("NSERT INTO institut_of_culture (\n" +
