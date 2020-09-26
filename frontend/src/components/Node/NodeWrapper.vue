@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import { mapState} from 'vuex'
+    import { mapState, mapActions} from 'vuex'
     import Node from './Node'
     export default {
         name: "NodeWrapper",
@@ -23,8 +23,16 @@
                 selectFloorId: 'selectFloorId'
             }),
             nodeElementsByFloor(){
-                return this.nodeElements.filter(n=>n.level==this.selectFloorId)
+                return this.nodeElements
             }
+        },
+        methods:{
+            ...mapActions('editor', {
+                getAllNodes: 'get_all_nodes'
+            })
+        },
+        mounted() {
+            this.getAllNodes()
         }
     }
 </script>

@@ -24,11 +24,17 @@
         },
         methods:{
             ...mapActions('editor', {
-                selectHomeElement: 'select_home_element'
+                selectHomeElement: 'select_home_element',
+                selectElementForSearche: 'select_home_element_for_searche',
             }),
             select(e){
                 e.preventDefault();
                 if (this.modeEditor=='draw'){
+                    return;
+                }
+                if (this.modeEditor=='search'){
+                    this.selectElementForSearche(this.data)
+                    e.stopPropagation();
                     return;
                 }
                 if (this.data.newElement) {

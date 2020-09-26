@@ -1,7 +1,7 @@
 <template>
     <div>
         <div @click="onClick">
-            <svg @mo>
+            <svg>
                 <image
                         style="opacity: 0.5; filter: invert(1)"
                         :href="'data:image/png;base64,' + selectFloor.image"
@@ -23,6 +23,16 @@
                 <node-wrapper />
             </g>
             </svg>
+            <v-btn
+                    fab
+                    color="cyan accent-2"
+                    bottom
+                    right
+                    fixed
+                    @click="searchPath"
+            >
+                <v-icon>mdi-search</v-icon>
+            </v-btn>
         </div>
     </div>
 </template>
@@ -66,7 +76,8 @@
                 addHomeElement: 'add_home_element',
                 addNode: 'add_node',
                 unselect: 'unselect',
-                getAllHomeElements: 'get_all_home_elements'
+                getAllHomeElements: 'get_all_home_elements',
+                searchPath: 'search_path'
             }),
             onMouseMove(e) {
                 //console.log(this.newHomeElement)
@@ -133,7 +144,9 @@
                             }
                             break
                         }
-                        case 'node' : {
+                        case 'door' :
+                        case 'stair' :
+                            case 'elevator' : {
                             this.addNode({
                                 positionStart: {
                                     x: x,

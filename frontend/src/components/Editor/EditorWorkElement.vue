@@ -85,7 +85,13 @@
                         title: 'Выбор объекта',
                         icon: 'check',
                         event: 'select'
-                    }
+                    },
+                    {
+                        title: 'Поиск объекта',
+                        icon: 'searche',
+                        event: 'searche'
+                    },
+
                 ],
                 homeElement: '1',
                 homeElements: [
@@ -161,14 +167,17 @@
                 if(type=='draw') {
                     this.setDrawMode()
                 }
-                else {
+                else if(type=='select'){
                     this.setSelectMode()
+                }else{
+                    this.setSearcheMode()
                 }
             },
             ...mapActions('editor', {
                 setDrawMode: 'set_draw_mode_editor',
                 setSelectMode: 'set_select_mode_editor',
-                setDrawTypeElement: 'set_draw_type_element'
+                setDrawTypeElement: 'set_draw_type_element',
+                setSearcheMode: 'set_searche_mode',
             })
         }
     }
