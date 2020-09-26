@@ -20,7 +20,7 @@
 
         <TextView
             android:id="@+id/tvCityName"
-            android:layout_width="330dp"
+            android:layout_width="290dp"
             android:layout_height="wrap_content"
             android:scrollHorizontally="false"
             android:singleLine="false"

@@ -4,6 +4,7 @@
       <w>adress</w>
       <w>bable</w>
       <w>cityes</w>
+      <w>essid</w>
       <w>idcity</w>
       <w>idtype</w>
       <w>instcult</w>
@@ -11,6 +12,7 @@
       <w>permisses</w>
       <w>rescult</w>
       <w>resculture</w>
+      <w>snackbar</w>
       <w>ssid</w>
     </words>
   </dictionary>
