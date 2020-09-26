@@ -16,7 +16,7 @@
                         :width="data.size.width"
                         :height="data.size.height">
             <div style="color: red;">
-                Новая комната
+                {{data.title}}
             </div>
         </foreignObject>
     </g>

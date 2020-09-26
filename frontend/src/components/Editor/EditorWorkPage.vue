@@ -84,7 +84,7 @@
                 const x = e.clientX - 390;
                 const y = e.clientY -64;
 
-                if (this.drawHomeElement && this.drawTypeElement==='room') {
+                if (this.drawHomeElement) {
                     this.newHomeElement = {
                         positionStart: {
                             x: Math.min(x, this.startX),
@@ -96,7 +96,6 @@
                         },
                         type: this.drawTypeElement,
                         newElement: true,
-                        id: this.startY,
                     }
                 }
             },
@@ -135,7 +134,6 @@
                                             height: Math.abs(y - this.startY),
                                         },
                                         type: this.drawTypeElement,
-                                        id: this.startY-43
                                     })
                                     this.startX = null;
                                     this.startY = null;
