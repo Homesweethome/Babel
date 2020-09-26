@@ -45,7 +45,7 @@ namespace Babel.Api.Extensions
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                    options.JsonSerializerOptions.IgnoreNullValues = true;
+                    options.JsonSerializerOptions.IgnoreNullValues = false;
                 });
 
             services.AddRazorPages()

@@ -461,3 +461,4 @@ System.Net.Http.HttpRequestException: Этот хост неизвестен.
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.ResponseCompression.ResponseCompressionMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-09-27 00:59:26.154 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
