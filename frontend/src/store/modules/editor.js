@@ -36,13 +36,15 @@ const actions = {
         dispatch('get_all_floors')
 
     },
-    async get_all_floors({commit}){
+    async get_all_floors({commit, dispatch}){
       let allFloors = await APIEditorServices.getFloors()
       commit('SAVE_FLOORS', allFloors.data)
+        dispatch('set_active_floor', allFloors.data[0].id)
     },
-    // delete_floor({commit}, data){
-    //
-    // },
+    async delete_floor({dispatch,state},id){
+        await APIEditorServices.deleteFloor(state.selectFloorId)
+        dispatch('get_all_floors')
+    },
     async add_home_element({commit, dispatch, state}, data){
         data.floor = state.selectFloorId
         data.type = state.drawTypeElement

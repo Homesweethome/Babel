@@ -1,10 +1,10 @@
 <template>
     <div>
         <div @click="onClick">
-            <svg>
+            <svg @mo>
                 <image
                         style="opacity: 0.5; filter: invert(1)"
-                        :href="selectFloor.pathImage"
+                        :href="'data:image/png;base64,' + selectFloor.image"
                         x="50"
                         y="60"
                         width="1000"
@@ -38,6 +38,7 @@
         components: {NodeWrapper,  HomeElementWrapper, HomeElement},
         data(){
             return{
+                zoom: 1,
                 newHomeElement: null,
                 stageDrawHomeElement: 'start',
                 drawTypeHomeElement: 'node',

@@ -5,10 +5,12 @@
                 <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
                 <h3>{{modeEditorText}}</h3>
                 <v-spacer/>
+                <editor-floors />
             </v-app-bar>
             <v-navigation-drawer
                     v-model="drawer"
                     width="330"
+                    permanent
                     app>
                 <v-row class="fill-height" no-gutters>
                     <v-navigation-drawer
@@ -54,9 +56,9 @@
                                  width="400">
                 <editor-properties-element />
             </v-navigation-drawer>
-            <editor-floors />
-            <v-footer app>
-                <!-- -->
+
+            <v-footer>
+
             </v-footer>
         </v-container>
     </div>

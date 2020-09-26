@@ -44,11 +44,16 @@ async function addImageFloor(level,data) {
             }
         })
 }
+
+async function deleteFloor(idLevel) {
+    return await axios.delete('/level/'+idLevel)
+}
 export default {
     getAllHomeElements,
     setHomeElements,
     deleteHomeElement,
     addFloors,
     getFloors,
-    addImageFloor
+    addImageFloor,
+    deleteFloor
 }
