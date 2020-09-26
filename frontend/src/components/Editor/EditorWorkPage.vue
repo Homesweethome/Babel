@@ -15,7 +15,7 @@
             ><g>
 
                 <home-element-wrapper />
-
+                <polyline points="297,125 416,155 510,152 624,162 672,126" style="fill:none;stroke:black;stroke-width:3"></polyline>
                 <home-element
                         v-show="stageDrawHomeElement!='start'"
                         :data="newHomeElement"
