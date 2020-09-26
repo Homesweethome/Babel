@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "bable";
 
     /*types_of_ premises*/
@@ -24,8 +24,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String KEY_SL = "sl";
 
     /*institut_of_culture*/
+    public static final String TABLE_INSTITUT_OF_CULTURE = "institut_of_culture";
     public static final String KEY_ID_INSTCULT = "_id";
     public static final String KEY_name_of_institute = "name_of_institute";
+    public static final String KEY_address_inst_cultur = "address_inst_cultur";
     public static final String KEY_path_to_image = "path_to_image";
     public static final String KEY_idcity = "idcity";
     public static final String KEY_idtype_of_institution = "idtype_of_institution";
@@ -78,6 +80,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "                                        UNIQUE ON CONFLICT ROLLBACK\n" +
                 "                                        NOT NULL,\n" +
                 "    name_of_institute     VARCHAR (250) NOT NULL ON CONFLICT ROLLBACK,\n" +
+                "    address_inst_cultur     VARCHAR (250) NOT NULL ON CONFLICT ROLLBACK,\n" +
                 "    path_to_image         VARCHAR (250) DEFAULT [not img],\n" +
                 "    idcity                INTEGER       REFERENCES city (_id) ON DELETE SET NULL\n" +
                 "                                                              ON UPDATE CASCADE,\n" +
@@ -142,6 +145,76 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL("PRAGMA foreign_keys = 0;\n" +
+                "\n" +
+                "CREATE TABLE sqlitestudio_temp_table AS SELECT *\n" +
+                "                                          FROM institut_of_culture;\n" +
+                "\n" +
+                "DROP TABLE institut_of_culture;\n" +
+                "\n" +
+                "CREATE TABLE institut_of_culture (\n" +
+                "    _id                   INTEGER       PRIMARY KEY ON CONFLICT ROLLBACK AUTOINCREMENT\n" +
+                "                                        UNIQUE ON CONFLICT ROLLBACK\n" +
+                "                                        NOT NULL,\n" +
+                "    name_of_institute     VARCHAR (250) NOT NULL ON CONFLICT ROLLBACK,\n" +
+                "    path_to_image         VARCHAR (250) DEFAULT [not img],\n" +
+                "    idcity                INTEGER       REFERENCES city (_id) ON DELETE SET NULL\n" +
+                "                                                              ON UPDATE CASCADE,\n" +
+                "    idtype_of_institution INTEGER       REFERENCES type_of_institution (_id) ON DELETE SET NULL\n" +
+                "                                                                             ON UPDATE CASCADE,\n" +
+                "    address_inst_cultur   VARCHAR (300) \n" +
+                ");\n" +
+                "\n" +
+                "INSERT INTO institut_of_culture (\n" +
+                "                                    _id,\n" +
+                "                                    name_of_institute,\n" +
+                "                                    path_to_image,\n" +
+                "                                    idcity,\n" +
+                "                                    idtype_of_institution\n" +
+                "                                )\n" +
+                "                                SELECT _id,\n" +
+                "                                       name_of_institute,\n" +
+                "                                       path_to_image,\n" +
+                "                                       idcity,\n" +
+                "                                       idtype_of_institution\n" +
+                "                                  FROM sqlitestudio_temp_table;\n" +
+                "\n" +
+                "DROP TABLE sqlitestudio_temp_table;\n" +
+                "\n" +
+                "PRAGMA foreign_keys = 1;\n");
+
+
+        sqLiteDatabase.execSQL("NSERT INTO institut_of_culture (\n" +
+                "                                    name_of_institute,\n" +
+                "                                    idcity,\n" +
+                "                                    address_inst_cultur\n" +
+                "                                )\n" +
+                "                                VALUES (\n" +
+                "                                    'Центральная городская библиотека',\n" +
+                "                                    '1',\n" +
+                "                                    'Алтайский край, город Рубцовск, пр. Ленина, 137-А,Б'\n" +
+                "                                );");
+        sqLiteDatabase.execSQL("NSERT INTO institut_of_culture (\n" +
+                "                                    name_of_institute,\n" +
+                "                                    idcity,\n" +
+                "                                    address_inst_cultur\n" +
+                "                                )\n" +
+                "                                VALUES (\n" +
+                "                                    'Центральная детская библиотека',\n" +
+                "                                    '1',\n" +
+                "                                    'Алтайский край, город Рубцовск, пр. Ленина 53 «а»'\n" +
+                "                                );");
+        sqLiteDatabase.execSQL("NSERT INTO institut_of_culture (\n" +
+                "                                    name_of_institute,\n" +
+                "                                    idcity,\n" +
+                "                                    address_inst_cultur\n" +
+                "                                )\n" +
+                "                                VALUES (\n" +
+                "                                    'Библиотека семейного чтения «Лад»',\n" +
+                "                                    '1',\n" +
+                "                                    'Алтайский край, город Рубцовск, ул. Федоренко, 17в'\n" +
+                "                                );");
+
 
     }
 }
