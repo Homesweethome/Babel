@@ -102,7 +102,7 @@ namespace Babel.Api.Controllers
         {
             var rooms = (await _roomService.Get()).Where(x => x.Type == "room" && x.Level == sourceRoom.Level);
             var nonPassable = (await _roomService.Get()).Where(x => x.Type != "room" && x.Level == sourceRoom.Level).ToList();
-            var doors = (await _entityService.GetEntitiesByType("door")).Where(x => x.LevelId == sourceRoom.Level);
+            var doors = (await _entityService.GetEntitiesByType("door")).Where(x => x.LevelId == sourceRoom.Level).ToList();
             var stairs = await _entityService.GetEntitiesByType("stairs");
             var elevators = await _entityService.GetEntitiesByType("elevator");
 
@@ -137,6 +137,9 @@ namespace Babel.Api.Controllers
                 string result = "";
 
                 var previous = shortestPath[0].Position + shortestPath[0].Size / 2;
+                previous.X = Math.Floor(previous.X);
+                previous.Y = Math.Floor(previous.Y);
+
                 for (int i = 0; i < shortestPath.Count() - 1; i++)
                 {
                     var current = shortestPath[i];
@@ -190,7 +193,7 @@ namespace Babel.Api.Controllers
             }
 
             var astar = new Astar(grid);
-            var path = astar.FindPath(from, to);
+            var path = astar.FindPath(from - room.Position, to - room.Position);
             return path.Select(x => new Vector(x.Position.X, x.Position.Y)).ToList();
         }
 

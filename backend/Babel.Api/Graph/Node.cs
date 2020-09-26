@@ -8,7 +8,7 @@ namespace Babel.Api.Graph
 {
     public class Node
     {
-        public static int NODE_SIZE = 2;
+        public static int NODE_SIZE = 16;
         public Node Parent;
         public Vector Position;
         public Vector Center

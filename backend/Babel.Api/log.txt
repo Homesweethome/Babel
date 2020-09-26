@@ -462,3 +462,13 @@ System.Net.Http.HttpRequestException: Этот хост неизвестен.
    at Microsoft.AspNetCore.ResponseCompression.ResponseCompressionMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
 2020-09-27 00:59:26.154 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2020-09-27 01:58:53.826 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2020-09-27 02:06:39.213 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2020-09-27 02:09:26.553 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2020-09-27 02:11:52.465 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2020-09-27 02:26:20.121 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2020-09-27 02:28:14.718 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2020-09-27 02:30:25.907 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2020-09-27 02:31:04.770 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2020-09-27 02:32:13.002 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2020-09-27 02:32:46.351 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
