@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Babel.Api.Base;
 using Babel.Api.Graph;
 using Babel.Db.Base;
+using Babel.Db.Models;
 using Babel.Db.Models.Entities;
 using Babel.Db.Models.Rooms;
 using Babel.Db.Services;
@@ -38,6 +39,11 @@ namespace Babel.Api.Controllers
             var targetRoom = await _roomService.GetRoomByName(targetRoomName);
 
             if (sourceRoom == null)
+                sourceRoom = await _roomService.Get(sourceRoomName);
+            if (targetRoom == null)
+                targetRoom = await _roomService.Get(targetRoomName);
+
+                if (sourceRoom == null)
                 return NotFound("Исходная комната не найдена");
             if (targetRoom == null)
                 return NotFound("Целевая комната не найдена");
@@ -48,32 +54,22 @@ namespace Babel.Api.Controllers
             var elevators = await _entityService.GetEntitiesByType("elevator");
 
             // строим граф соединений всех комнат
-            var graph = new Graph<BaseRoom>();
-            foreach (var baseRoom in rooms)
+            var graph = new Graph<BasePathable>();
+            foreach (var baseRoom in rooms) // для начала добавим все комнаты
             {
                 graph.AddVertex(baseRoom);
             }
 
-            foreach (var door in doors)
+            foreach (var door in doors) // потом добавим все двери
             {
-                List<BaseRoom> allIntersectedRooms = new List<BaseRoom>();
-                foreach (var room in rooms)
+                graph.AddVertex(door);
+                foreach (var room in rooms)     // и посмотрим, если дверь пересекается с комнатой, то добавим грань
                 {
                     bool doesIntersects = DoesIntersects(door, room);
                     if (doesIntersects)
-                        allIntersectedRooms.Add(room);
-                }
-
-                if (allIntersectedRooms.Count > 1)
-                {
-                    for (int i = 0; i < allIntersectedRooms.Count; i++)
                     {
-                        for (int j = 0; j < allIntersectedRooms.Count; j++)
-                        {
-                            if (i == j)
-                                continue;
-                            graph.AddEdge(new Tuple<BaseRoom, BaseRoom>(allIntersectedRooms[i], allIntersectedRooms[j]));
-                        }
+                        graph.AddEdge(new Tuple<BasePathable, BasePathable>(door, room));
+                        graph.AddEdge(new Tuple<BasePathable, BasePathable>(room, door));
                     }
                 }
             }
@@ -82,7 +78,7 @@ namespace Babel.Api.Controllers
             var shortestPathFunc = bfsAlgo.ShortestPathFunction(graph, sourceRoom);
             var shortestPath = shortestPathFunc(targetRoom);
 
-            var result = shortestPath.Select(x => x.Name);
+            var result = shortestPath;
 
 
             return JsonResponse.New(result);
