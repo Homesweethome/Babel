@@ -134,7 +134,7 @@ namespace Babel.Api.Controllers
                 // сначала графами строим путь
                 var shortestPath = shortestPathFunc(rooms.First(x => x.Id == targetRoom.Id)).ToList();
 
-                string result = "";
+               /* string result = "";
 
                 var previous = shortestPath[0].Position + shortestPath[0].Size / 2;
                 previous.X = Math.Floor(previous.X);
@@ -158,11 +158,11 @@ namespace Babel.Api.Controllers
                     previous = next.Position;
                 }
 
-                result = result.Trim();
+                result = result.Trim();*/
 
-                /* var result = string.Join(" ",
+                 var result = string.Join(" ",
                      shortestPath.Select(x => Math.Floor(x.Position.X + (x.Size == null ? 0 : x.Size.Width / 2)) + ","
-                         + Math.Floor(x.Position.Y + (x.Size == null ? 0 : x.Size.Height / 2))));*/
+                         + Math.Floor(x.Position.Y + (x.Size == null ? 0 : x.Size.Height / 2))));
 
                 return JsonResponse.New(result);
             }
