@@ -42,9 +42,8 @@ namespace Babel.Api.Controllers
         {
             var entities = await _entityService.GetEntitiesByLevel(level);
             var converted = _mapper.Map<List<EntityDto>>(entities);
-            var result = JsonSerializer.Serialize(converted);
 
-            return JsonResponse.New(result);
+            return JsonResponse.New(converted);
         }
 
         /// <summary>
@@ -62,7 +61,7 @@ namespace Babel.Api.Controllers
             entity.LevelId = level;
             var result = await _entityService.Create(entity);
 
-            return JsonResponse.New(result);
+            return JsonResponse.New(_mapper.Map<EntityDto> (result));
         }
 
         /// <summary>
