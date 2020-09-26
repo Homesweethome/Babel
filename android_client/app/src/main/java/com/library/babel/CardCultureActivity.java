@@ -12,7 +12,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class CardCultureActivity extends AppCompatActivity {
+
     private Floors[] fl;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

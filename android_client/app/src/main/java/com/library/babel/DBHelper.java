@@ -67,15 +67,15 @@ public class DBHelper extends SQLiteOpenHelper {
                 "    name_city VARCHAR (250),\n" +
                 "    nl        DECIMAL       DEFAULT (0),\n" +
                 "    sl        DECIMAL       DEFAULT (0) \n" +
-                ");\n" +
-                "\n" +
-                "CREATE TABLE type_of_institution (\n" +
+                ");\n");
+
+        db.execSQL("CREATE TABLE type_of_institution (\n" +
                 "    _id          INTEGER       PRIMARY KEY ON CONFLICT ROLLBACK AUTOINCREMENT\n" +
                 "                               UNIQUE,\n" +
                 "    name_of_type VARCHAR (250) \n" +
-                ");\n" +
-                "\n" +
-                "CREATE TABLE institut_of_culture (\n" +
+                ");\n");
+
+        db.execSQL("CREATE TABLE institut_of_culture (\n" +
                 "    _id                   INTEGER       PRIMARY KEY ON CONFLICT ROLLBACK AUTOINCREMENT\n" +
                 "                                        UNIQUE ON CONFLICT ROLLBACK\n" +
                 "                                        NOT NULL,\n" +
@@ -86,18 +86,18 @@ public class DBHelper extends SQLiteOpenHelper {
                 "                                                              ON UPDATE CASCADE,\n" +
                 "    idtype_of_institution INTEGER       REFERENCES type_of_institution (_id) ON DELETE SET NULL\n" +
                 "                                                                             ON UPDATE CASCADE\n" +
-                ");\n" +
-                "\n" +
-                "CREATE TABLE types_of_rescult (\n" +
+                ");\n");
+
+        db.execSQL("CREATE TABLE types_of_rescult (\n" +
                 "    _id                     INTEGER PRIMARY KEY ON CONFLICT ROLLBACK AUTOINCREMENT\n" +
                 "                                    NOT NULL ON CONFLICT ROLLBACK\n" +
                 "                                    UNIQUE ON CONFLICT ROLLBACK,\n" +
                 "    name_type_of_resculture VARCHAR,\n" +
                 "    id_instcult             INTEGER REFERENCES institut_of_culture (_id) ON DELETE SET NULL\n" +
                 "                                                                         ON UPDATE CASCADE\n" +
-                ");\n" +
-                "\n" +
-                "CREATE TABLE types_of_ premises (\n" +
+                ");\n");
+
+        db.execSQL("CREATE TABLE types_of_premises (\n" +
                 "    _id                INTEGER       PRIMARY KEY ON CONFLICT ROLLBACK AUTOINCREMENT\n" +
                 "                                     UNIQUE ON CONFLICT ROLLBACK\n" +
                 "                                     NOT NULL ON CONFLICT ROLLBACK,\n" +
@@ -106,9 +106,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 "    id_instcult        INTEGER       REFERENCES institut_of_culture (_id) ON DELETE SET NULL\n" +
                 "                                                                          ON UPDATE CASCADE,\n" +
                 "    path_to_schema     VARCHAR (500) \n" +
-                ");\n" +
-                "\n" +
-                "CREATE TABLE points_in_premises (\n" +
+                ");\n");
+
+        db.execSQL("CREATE TABLE points_in_premises (\n" +
                 "    _id                     INTEGER PRIMARY KEY ON CONFLICT ROLLBACK AUTOINCREMENT\n" +
                 "                                    UNIQUE ON CONFLICT ROLLBACK\n" +
                 "                                    NOT NULL ON CONFLICT ROLLBACK,\n" +
@@ -117,15 +117,15 @@ public class DBHelper extends SQLiteOpenHelper {
                 "                                                                           ON UPDATE CASCADE,\n" +
                 "    img_point_coordinates_x DECIMAL DEFAULT (0),\n" +
                 "    img_point_coordinates_y DECIMAL DEFAULT (0) \n" +
-                ");\n" +
-                "\n" +
-                "CREATE TABLE point_perm_detect_wifi (\n" +
+                ");\n");
+
+        db.execSQL("CREATE TABLE point_perm_detect_wifi (\n" +
                 "    _id           INTEGER       PRIMARY KEY ON CONFLICT ROLLBACK AUTOINCREMENT\n" +
                 "                                UNIQUE ON CONFLICT ROLLBACK\n" +
                 "                                NOT NULL ON CONFLICT ROLLBACK,\n" +
                 "    id_pint_in_mg INTEGER       REFERENCES points_in_premises (_id) ON DELETE SET NULL\n" +
                 "                                                                    ON UPDATE CASCADE,\n" +
-                "    ssid          VARCHAR (250) DEFAULT [not ssid],\n" +
+                "    ssid          VARCHAR (250) DEFAULT 'not ssid',\n" +
                 "    level         DECIMAL       DEFAULT (0) \n" +
                 ");\n");
 
@@ -141,6 +141,37 @@ public class DBHelper extends SQLiteOpenHelper {
                 "                 VALUES (\n" +
                 "                     'город Новосибирск'\n" +
                 "                 );\n");
+
+        db.execSQL("INSERT INTO institut_of_culture (\n" +
+                "                                    name_of_institute,\n" +
+                "                                    idcity,\n" +
+                "                                    address_inst_cultur\n" +
+                "                                )\n" +
+                "                                VALUES (\n" +
+                "                                    'Центральная городская библиотека',\n" +
+                "                                    '1',\n" +
+                "                                    'Алтайский край, город Рубцовск, пр. Ленина 137-А,Б'\n" +
+                "                                );");
+        db.execSQL("INSERT INTO institut_of_culture (\n" +
+                "                                    name_of_institute,\n" +
+                "                                    idcity,\n" +
+                "                                    address_inst_cultur\n" +
+                "                                )\n" +
+                "                                VALUES (\n" +
+                "                                    'Центральная детская библиотека',\n" +
+                "                                    '1',\n" +
+                "                                    'Алтайский край, город Рубцовск, пр. Ленина 53 а'\n" +
+                "                                );");
+        db.execSQL("INSERT INTO institut_of_culture (\n" +
+                "                                    name_of_institute,\n" +
+                "                                    idcity,\n" +
+                "                                    address_inst_cultur\n" +
+                "                                )\n" +
+                "                                VALUES (\n" +
+                "                                    'Библиотека семейного чтения «Лад»',\n" +
+                "                                    '1',\n" +
+                "                                    'Алтайский край, город Рубцовск, ул. Федоренко 17в'\n" +
+                "                                );");
     }
 
     @Override
