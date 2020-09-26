@@ -2,7 +2,16 @@
   <dictionary name="fofin">
     <words>
       <w>adress</w>
+      <w>bable</w>
       <w>cityes</w>
+      <w>idcity</w>
+      <w>idtype</w>
+      <w>instcult</w>
+      <w>institut</w>
+      <w>permisses</w>
+      <w>rescult</w>
+      <w>resculture</w>
+      <w>ssid</w>
     </words>
   </dictionary>
 </component>
