@@ -275,3 +275,4 @@ Babel.Api.Dto.SizeDto -> Babel.Db.Base.Size
 2020-09-25 19:45:58.697 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
 2020-09-26 00:08:20.005 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
 2020-09-26 01:56:45.528 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2020-09-26 17:53:34.156 +07:00 [WRN] Overriding address(es) 'http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.

@@ -43,7 +43,7 @@ namespace Babel.Api.Controllers
             if (targetRoom == null)
                 targetRoom = await _roomService.Get(targetRoomName);
 
-                if (sourceRoom == null)
+            if (sourceRoom == null)
                 return NotFound("Исходная комната не найдена");
             if (targetRoom == null)
                 return NotFound("Целевая комната не найдена");
@@ -80,15 +80,13 @@ namespace Babel.Api.Controllers
             {
                 var shortestPath = shortestPathFunc(rooms.First(x => x.Id == targetRoom.Id));
 
-                var result = shortestPath;
-
+                var result = string.Join(" ", shortestPath.Select(x => x.Position).Select(x => x.X + "," + x.Y));
 
                 return JsonResponse.New(result);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                return BadRequest("Не удалось построить маршрут");
             }
             return BadRequest("Не удалось построить маршрут");
         }
@@ -108,23 +106,6 @@ namespace Babel.Api.Controllers
             var dx = distX - room.Size.Width / 2;
             var dy = distY - room.Size.Height / 2;
             return (dx * dx + dy * dy <= (doorRadius * doorRadius));
-
-
-            /*int doorRadius = 10 ;
-            Vector distance = new Vector();
-            distance.X = Math.Abs(door.Position.X - room.Position.X + 10);
-            distance.Y = Math.Abs(door.Position.Y - room.Position.Y + 10);
-
-            if (distance.X > (room.Size.Width / 2 + doorRadius)) { return false; }
-            if (distance.Y > (room.Size.Height / 2 + doorRadius)) { return false; }
-
-            if (distance.X <= (room.Size.Width / 2)) { return true; }
-            if (distance.Y <= (room.Size.Height / 2)) { return true; }
-
-            var distanceSquared = Math.Pow((distance.X - room.Size.Width / 2), 2) +
-                                  Math.Pow((distance.Y - room.Size.Height / 2), 2);
-
-            return (distanceSquared <= (doorRadius * doorRadius));*/
         }
     }
 }
