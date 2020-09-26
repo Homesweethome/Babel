@@ -20,6 +20,7 @@ namespace Babel.Api.Services
         {
             var search = new SearchRusmarc();
             search.ID = id;
+            search.RUSMARC = "1";
             var stringPayload = await Task.Run(() => JsonConvert.SerializeObject(search));
 
 
@@ -32,14 +33,17 @@ namespace Babel.Api.Services
             
 
             var asString = await responseMessage.Content.ReadAsStringAsync();
-
-            return asString;
+            asString += "\"}]}";
+            asString = asString.Remove(0, 1);
 
             try
             {
                 dynamic desirialized = Newtonsoft.Json.JsonConvert.DeserializeObject(asString);
                 var unimarc = desirialized.result[0].UNIMARC;
-                var attributesArray = (string[])unimarc;
+                
+                List<string> attributesArray = unimarc.ToObject<List<string>>();
+
+
                 var attr = attributesArray.First(x => x.StartsWith("899"));
                 var splitted = attr.Split('$');
                 var position = splitted.First(x => x.StartsWith("b"));
