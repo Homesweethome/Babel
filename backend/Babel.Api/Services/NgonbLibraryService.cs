@@ -76,8 +76,8 @@ namespace Babel.Api.Services
             var asString = await responseMessage.Content.ReadAsStringAsync();
             if (!asString.EndsWith("}"))
             {
-                asString += "\"}]}";
-                asString = asString.Remove(0, 1);
+                //asString += "\"}]}";
+                //asString = asString.Remove(0, 1);
             }
             return asString;
         }
