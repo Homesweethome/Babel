@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#314d63</color>
+    <color name="colorPrimaryDark">#6A6A6A</color>
+    <color name="colorAccent">#526563</color>
+    <color name="mainBackColor">#313435</color>
+    <color name="mainTextColor">#F8F9FA</color>
+    <color name="NameLabelTextColor">#A3A3A3</color>
+    <color name="NameTextColor">#ADBDCD</color>
+    <color name="AdressLabelTextColor">#A3A3A3</color>
+    <color name="AdressTextColor">#ADBDCD</color>
+    <color name="SelectedItemColor">#644a29</color>
+</resources>

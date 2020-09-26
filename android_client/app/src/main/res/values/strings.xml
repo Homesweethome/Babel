@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Babel</string>
+    <string name="search">Найти</string>
+    <string name="authorOrName">Введите автора или название книги</string>
+    <string name="institutionNameLabel">Наименование учреждения:</string>
+    <string name="institutionName">Наименование учреждения</string>
+    <string name="institutionAdressLabel">Адрес учреждения:</string>
+    <string name="institutionAdress">Адрес учреждения</string>
+    <string name="cityNameLabel">Наименование города:</string>
+    <string name="cityName">Наименование города</string>
+    <string name="btnSettings">Настройки</string>
+    <string name="btnSelect">Выбрать</string>
+    <string name="btnClose">Закрыть</string>
+</resources>
