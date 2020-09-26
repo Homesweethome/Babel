@@ -3,6 +3,7 @@ package com.library.babel;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,8 +33,13 @@ public class LibrariesActivityList extends AppCompatActivity {
 
     public void SetDataLibraryToList(){
 
-       /* SQLiteDatabase database = dbHelper.getWritableDatabase();
-        Cursor cursor = database.query(DBHelper.TABLE_INSTITUT_OF_CULTURE, null, null, null, null, null, null);
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        Cursor cursor = null;
+        try {
+             cursor = database.query(DBHelper.TABLE_INSTITUT_OF_CULTURE, null, null, null, null, null, null);
+        }catch (Exception e){
+            Log.d("nLog", "Ошибка! " + e.getMessage());
+        }
 
         if (cursor.moveToFirst()){
             this.libraries = new Libraries[cursor.getCount()];
@@ -49,10 +56,10 @@ public class LibrariesActivityList extends AppCompatActivity {
             Log.d("nLog", "Нет записей!");
         }
         cursor.close();
-        dbHelper.close();*/
+        dbHelper.close();
 
 
-        this.libraries = new Libraries[3];
+       /*this.libraries = new Libraries[3];
 
         String name = "Центральная городская библиотека";
         String adress = "Алтайский край, город Рубцовск, пр. Ленина, 137-А,Б";
@@ -64,11 +71,17 @@ public class LibrariesActivityList extends AppCompatActivity {
 
         name = "Библиотека семейного чтения «Лад»";
         adress = "Алтайский край, город Рубцовск, ул. Федоренко, 17в";
-        libraries[2] = new Libraries(name, adress);
+        libraries[2] = new Libraries(name, adress);*/
 
         AdapterLibraries adapterLibraries = new AdapterLibraries(this);
         ListView libList = (ListView) findViewById(R.id.libraryItems);
         libList.setAdapter(adapterLibraries);
+        libList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                Intent intent = new Intent(getApplicationContext(), CardCultureActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

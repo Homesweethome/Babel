@@ -38,13 +38,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxHeight="35dp"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
 
         <ListView
             android:id="@+id/cityItems"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="575dp"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="2dp"
             tools:layout_editor_absoluteY="76dp">

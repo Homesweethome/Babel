@@ -11,6 +11,7 @@
     <string name="btnSettings">Настройки</string>
     <string name="btnSelect">Выбрать</string>
     <string name="btnClose">Закрыть</string>
+    <string name="nameLabelNumberFloor">Этаж:</string>
     <string name="title_activity_libraries_list">Учреждения культуры г. Рубцовска</string>
     <!--
     This string is used for square devices and overridden by hello_world in

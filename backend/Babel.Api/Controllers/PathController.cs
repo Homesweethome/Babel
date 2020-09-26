@@ -49,6 +49,31 @@ namespace Babel.Api.Controllers
         }
 
         /// <summary>
+        /// Проложить маршрут до книги
+        /// </summary>
+        /// <param name="sourceRoomName"></param>
+        /// <param name="bookId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("pathtobook")]
+        public async Task<IActionResult> GetPathToBook(string sourceRoomName, string bookId)
+        {
+            var fundName = await _ngonbLibraryService.SearchById(bookId);
+            if (string.IsNullOrEmpty(fundName))
+                return NotFound("Не удалось найти зал для книги " + bookId);
+
+            var sourceRoom = await _roomService.Get(sourceRoomName);
+            var targetRoom = await _roomService.GetRoomByName(fundName);
+
+            if (sourceRoom == null)
+                return NotFound("Исходная комната не найдена");
+            if (targetRoom == null)
+                return NotFound("Целевая комната не найдена");
+
+            return await PathToRoom(sourceRoom, targetRoom);
+        }
+
+        /// <summary>
         /// Получить путь из комнаты в комнату
         /// </summary>
         /// <param name="sourceRoomName"></param>
@@ -70,8 +95,14 @@ namespace Babel.Api.Controllers
             if (targetRoom == null)
                 return NotFound("Целевая комната не найдена");
 
-            var rooms = (await _roomService.Get()).Where(x => x.Type == "room");
-            var doors = await _entityService.GetEntitiesByType("door");
+            return await PathToRoom(sourceRoom, targetRoom);
+        }
+
+        private async Task<IActionResult> PathToRoom(BaseRoom sourceRoom, BaseRoom targetRoom)
+        {
+            var rooms = (await _roomService.Get()).Where(x => x.Type == "room" && x.Level == sourceRoom.Level);
+            var nonPassable = (await _roomService.Get()).Where(x => x.Type != "room" && x.Level == sourceRoom.Level).ToList();
+            var doors = (await _entityService.GetEntitiesByType("door")).Where(x => x.LevelId == sourceRoom.Level).ToList();
             var stairs = await _entityService.GetEntitiesByType("stairs");
             var elevators = await _entityService.GetEntitiesByType("elevator");
 
@@ -85,7 +116,7 @@ namespace Babel.Api.Controllers
             foreach (var door in doors) // потом добавим все двери
             {
                 graph.AddVertex(door);
-                foreach (var room in rooms)     // и посмотрим, если дверь пересекается с комнатой, то добавим грань
+                foreach (var room in rooms) // и посмотрим, если дверь пересекается с комнатой, то добавим грань
                 {
                     bool doesIntersects = DoesIntersects(door, room);
                     if (doesIntersects)
@@ -100,11 +131,38 @@ namespace Babel.Api.Controllers
             var shortestPathFunc = bfsAlgo.ShortestPathFunction(graph, rooms.First(x => x.Id == sourceRoom.Id));
             try
             {
-                var shortestPath = shortestPathFunc(rooms.First(x => x.Id == targetRoom.Id));
+                // сначала графами строим путь
+                var shortestPath = shortestPathFunc(rooms.First(x => x.Id == targetRoom.Id)).ToList();
 
-                var result = string.Join(" ",
-                    shortestPath.Select(x => Math.Floor(x.Position.X + (x.Size == null ? 10 : x.Size.Width / 2)) + ","
-                        + Math.Floor(x.Position.Y + (x.Size == null ? 10 : x.Size.Height / 2))));
+               /* string result = "";
+
+                var previous = shortestPath[0].Position + shortestPath[0].Size / 2;
+                previous.X = Math.Floor(previous.X);
+                previous.Y = Math.Floor(previous.Y);
+
+                for (int i = 0; i < shortestPath.Count() - 1; i++)
+                {
+                    var current = shortestPath[i];
+                    if (current.GetType() == typeof(Entity) && i < shortestPath.Count - 1)
+                    {
+                        previous = current.Position;
+                        continue;
+                    }
+
+                    var next = shortestPath[i + 1];
+
+                    var pathThroughRoom = await PathThroughRoom(current, previous, next.Position, nonPassable);
+
+                    result += string.Join(" ", pathThroughRoom.Select(x => x.X + "," + x.Y)) + " ";
+
+                    previous = next.Position;
+                }
+
+                result = result.Trim();*/
+
+                 var result = string.Join(" ",
+                     shortestPath.Select(x => Math.Floor(x.Position.X + (x.Size == null ? 0 : x.Size.Width / 2)) + ","
+                         + Math.Floor(x.Position.Y + (x.Size == null ? 0 : x.Size.Height / 2))));
 
                 return JsonResponse.New(result);
             }
@@ -112,7 +170,31 @@ namespace Babel.Api.Controllers
             {
                 return BadRequest("Не удалось построить маршрут");
             }
+
             return BadRequest("Не удалось построить маршрут");
+        }
+
+        private async Task<List<Vector>> PathThroughRoom(BasePathable room, Vector from, Vector to, List<BaseRoom> notPassableList)
+        {
+            var grid = new List<List<Node>>();
+            for (int i = 0; i < room.Size.Height; i++)
+            {
+                var row = new List<Node>();
+                grid.Add(row);
+                for (int j = 0; j < room.Size.Width; j++)
+                {
+                    bool isNotPassable = notPassableList.Any(x => x.Position.X < room.Position.X + j
+                    && x.Position.X + x.Size.Width > room.Position.X + j
+                    && x.Position.Y < room.Position.Y + i
+                    && x.Position.Y + x.Size.Height > room.Position.Y + i);
+                    var node = new Node(new Vector(j, i), !isNotPassable );
+                    row.Add(node);
+                }
+            }
+
+            var astar = new Astar(grid);
+            var path = astar.FindPath(from - room.Position, to - room.Position);
+            return path.Select(x => new Vector(x.Position.X, x.Position.Y)).ToList();
         }
 
         private bool DoesIntersects(Entity door, BaseRoom room)
