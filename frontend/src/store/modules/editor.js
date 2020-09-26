@@ -65,12 +65,15 @@ const actions = {
     },
     async add_home_element({commit, dispatch, state}, data){
         data.floor = state.selectFloorId
-        data.type = state.drawTypeElement
-        let newElement = {}
-        switch (state.drawTypeElement) {
-            case 'room' : newElement = await APIEditorServices.setHomeElements(data)
-                break;
+        if (!data.id){
+            data.type = state.drawTypeElement
         }
+            //let newElement = {}
+        await APIEditorServices.setHomeElements(data)
+        // switch (state.drawTypeElement) {
+        //     case 'room' : newElement = await APIEditorServices.setHomeElements(data)
+        //         break;
+        // }
         dispatch('get_all_home_elements')
         //commit('SAVE_NEW_HOME_ELEMENT', newElement)
     },
@@ -99,11 +102,14 @@ const actions = {
         const numberHomeElement = state.homeElements.indexOf(data)
         await APIEditorServices.deleteHomeElement(data.id)
         dispatch('get_all_home_elements')
+        dispatch('unselect')
         //commit('DELETE_HOME_ELEMENT', numberHomeElement)
     },
-    delete_node({commit}, data){
-        const numberNode = state.nodeElements.indexOf(data)
-        commit('DELETE_NODE_ELEMENT', numberNode)
+    async delete_node({dispatch}, data){
+        await APIEditorServices.deleteNode(data.id)
+        // commit('DELETE_NODE_ELEMENT', numberNode)
+        dispatch('get_all_nodes')
+        dispatch('unselect')
     },
     async get_all_home_elements({commit}){
         let homeElement = await APIEditorServices.getAllHomeElements()

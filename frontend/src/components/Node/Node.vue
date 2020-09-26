@@ -3,15 +3,12 @@
         <circle :cx="data.position.x"
                 :cy="data.position.y"
                 r="10"
-                stroke="black"
-                stroke-width="3"
-                fill="red"
-                fill-opacity="1"></circle>
+        opacity="0"></circle>
         <foreignObject
                 :x="data.position.x-10"
                 :y="data.position.y-10"
                 height="20" width="20">
-            <img :src="iconUrl">
+            <img :src="require('@/assets/icon/'+iconUrl)">
         </foreignObject>
     </g>
 </template>
@@ -45,11 +42,11 @@
             iconUrl(){
                 let path = ''
                 switch (this.data.type) {
-                    case 'door' : path = '../../assets/icon/door.svg'
+                    case 'door' : path = 'door.svg'
                         break;
-                    case 'stair' : path = '../../assets/icon/stair.svg'
+                    case 'stair' : path = 'stair.svg'
                         break;
-                    case 'elevator' : path = '../../assets/elevator.svg'
+                    case 'elevator' : path = 'elevator.svg'
                         break;
                 }
                 return path
