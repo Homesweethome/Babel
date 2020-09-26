@@ -33,8 +33,11 @@ namespace Babel.Api.Services
             
 
             var asString = await responseMessage.Content.ReadAsStringAsync();
-            asString += "\"}]}";
-            asString = asString.Remove(0, 1);
+            if (!asString.EndsWith("}"))
+            {
+                asString += "\"}]}";
+                asString = asString.Remove(0, 1);
+            }
 
             try
             {
@@ -58,6 +61,25 @@ namespace Babel.Api.Services
 
 
             return "";
+        }
+
+        public async Task<string> SearchByAll(SearchRusmarc search)
+        {
+            var stringPayload = await Task.Run(() => JsonConvert.SerializeObject(search));
+
+            var httpClient = new HttpClient();
+
+            var responseMessage = await httpClient.PostAsync(baseUrl,
+                new StringContent(stringPayload,
+                    Encoding.UTF8, "application/json"));
+
+            var asString = await responseMessage.Content.ReadAsStringAsync();
+            if (!asString.EndsWith("}"))
+            {
+                //asString += "\"}]}";
+                //asString = asString.Remove(0, 1);
+            }
+            return asString;
         }
     }
 
