@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using Babel.Api.Controllers;
+using Babel.Api.Services;
 using Babel.Db.Services;
 using Babel.Db.Settings;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,7 @@ namespace Babel.Api.Extensions
                 .AddSingleton<LevelService>()
                 .AddSingleton<EntityTypeService>()
 
+                .AddSingleton<NgonbLibraryService>()
 
                 ;
 
