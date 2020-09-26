@@ -1,23 +1,18 @@
 <template>
-    <!--    <g>-->
-    <!--        <foreightObject-->
-    <!--                :x="data.positionStart.x"-->
-    <!--                :y="data.positionStart.y"-->
-    <!--                :width="64"-->
-    <!--                :height="64"-->
-    <!--        >-->
-    <!--            <v-icon class="node-badge">-->
-    <!--                mdi-trash-->
-    <!--            </v-icon>-->
-    <!--        </foreightObject>-->
-    <!--    </g>-->
     <g @click="select">
         <circle :cx="data.position.x"
                 :cy="data.position.y"
                 r="10"
                 stroke="black"
                 stroke-width="3"
-                fill="red" />
+                fill="red"
+                fill-opacity="1"></circle>
+        <foreignObject
+                :x="data.position.x-10"
+                :y="data.position.y-10"
+                height="20" width="20">
+            <img :src="iconUrl">
+        </foreignObject>
     </g>
 </template>
 
@@ -47,6 +42,18 @@
                 modeEditor: 'modeEditor',
                 selectedNode: 'selectedNode'
             }),
+            iconUrl(){
+                let path = ''
+                switch (this.data.type) {
+                    case 'door' : path = '../../assets/icon/door.svg'
+                        break;
+                    case 'stair' : path = '../../assets/icon/stair.svg'
+                        break;
+                    case 'elevator' : path = '../../assets/elevator.svg'
+                        break;
+                }
+                return path
+            }
         },
         methods:{
             ...mapActions('editor', {
