@@ -75,21 +75,45 @@ namespace Babel.Api.Controllers
             }
 
             var bfsAlgo = new GraphBfsAlgorithm();
-            var shortestPathFunc = bfsAlgo.ShortestPathFunction(graph, sourceRoom);
-            var shortestPath = shortestPathFunc(targetRoom);
+            var shortestPathFunc = bfsAlgo.ShortestPathFunction(graph, rooms.First(x => x.Id == sourceRoom.Id));
+            try
+            {
+                var shortestPath = shortestPathFunc(rooms.First(x => x.Id == targetRoom.Id));
 
-            var result = shortestPath;
+                var result = shortestPath;
 
 
-            return JsonResponse.New(result);
+                return JsonResponse.New(result);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return BadRequest("Не удалось построить маршрут");
         }
 
         private bool DoesIntersects(Entity door, BaseRoom room)
         {
-            int doorRadius = 10 ;
+            int doorRadius = 10;
+            var distX = Math.Abs(door.Position.X - room.Position.X - room.Size.Width / 2);
+            var distY = Math.Abs(door.Position.Y - room.Position.Y - room.Size.Height / 2);
+
+            if (distX > (room.Size.Width / 2 + doorRadius)) { return false; }
+            if (distY > (room.Size.Height / 2 + doorRadius)) { return false; }
+
+            if (distX <= (room.Size.Width / 2)) { return true; }
+            if (distY <= (room.Size.Height / 2)) { return true; }
+
+            var dx = distX - room.Size.Width / 2;
+            var dy = distY - room.Size.Height / 2;
+            return (dx * dx + dy * dy <= (doorRadius * doorRadius));
+
+
+            /*int doorRadius = 10 ;
             Vector distance = new Vector();
-            distance.X = Math.Abs(door.Position.X - room.PositionStart.X);
-            distance.Y = Math.Abs(door.Position.Y - room.PositionStart.Y);
+            distance.X = Math.Abs(door.Position.X - room.Position.X + 10);
+            distance.Y = Math.Abs(door.Position.Y - room.Position.Y + 10);
 
             if (distance.X > (room.Size.Width / 2 + doorRadius)) { return false; }
             if (distance.Y > (room.Size.Height / 2 + doorRadius)) { return false; }
@@ -100,7 +124,7 @@ namespace Babel.Api.Controllers
             var distanceSquared = Math.Pow((distance.X - room.Size.Width / 2), 2) +
                                   Math.Pow((distance.Y - room.Size.Height / 2), 2);
 
-            return (distanceSquared <= (doorRadius ^ 2));
+            return (distanceSquared <= (doorRadius * doorRadius));*/
         }
     }
 }
