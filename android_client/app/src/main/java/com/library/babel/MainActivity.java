@@ -3,6 +3,7 @@ package com.library.babel;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
         dbHelper = new DBHelper(this);
 
+
         SetDataLibraryToList();
+
     }
 
     public void SetDataLibraryToList(){
@@ -50,6 +54,12 @@ public class MainActivity extends AppCompatActivity {
         AdapterCityes adapterCityes = new AdapterCityes(this);
         ListView libList = (ListView) findViewById(R.id.cityItems);
         libList.setAdapter(adapterCityes);
+        libList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                Intent intent = new Intent(getApplicationContext(), LibrariesActivityList.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
