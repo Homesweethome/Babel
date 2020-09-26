@@ -86,11 +86,6 @@
                         icon: 'check',
                         event: 'select'
                     },
-                    {
-                        title: 'Поиск объекта',
-                        icon: 'searche',
-                        event: 'searche'
-                    },
 
                 ],
                 homeElement: '1',
@@ -99,11 +94,6 @@
                         title: 'Комната',
                         icon: 'domain',
                         value: 'room'
-                    },
-                    {
-                        title: 'Стена',
-                        icon: '',
-                        value: 'wall'
                     },
                     {
                         title: 'Стеллаж',

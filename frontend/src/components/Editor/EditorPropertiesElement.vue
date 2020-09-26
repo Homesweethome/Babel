@@ -1,6 +1,5 @@
 <template>
     <v-container class="white--text">
-        {{selectedNode}}
         <v-row>
             <v-col cols="12">
                 <v-subheader class="subtitle-1">

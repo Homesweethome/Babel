@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Babel.Api.Base;
 using Babel.Api.Graph;
+using Babel.Api.Services;
 using Babel.Db.Base;
 using Babel.Db.Models;
 using Babel.Db.Models.Entities;
@@ -19,11 +20,32 @@ namespace Babel.Api.Controllers
     {
         private readonly RoomService _roomService;
         private readonly EntityService _entityService;
+        private readonly NgonbLibraryService _ngonbLibraryService;
 
-        public PathController(RoomService roomService, EntityService entityService)
+        public PathController(RoomService roomService, EntityService entityService,
+            NgonbLibraryService ngonbLibraryService)
         {
             _roomService = roomService;
             _entityService = entityService;
+            _ngonbLibraryService = ngonbLibraryService;
+        }
+
+        /// <summary>
+        /// Получить название библиотечного фонда по идентификатору книги
+        /// </summary>
+        [HttpGet]
+        [Route("findbook/{bookId}")]
+        public async Task<IActionResult> GetFundForBook(string bookId)
+        {
+            try
+            {
+                var result = await _ngonbLibraryService.SearchById(bookId);
+                return JsonResponse.New(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Что-то пошло не так при попытке запросить расположение книги");
+            }
         }
 
         /// <summary>
@@ -80,7 +102,9 @@ namespace Babel.Api.Controllers
             {
                 var shortestPath = shortestPathFunc(rooms.First(x => x.Id == targetRoom.Id));
 
-                var result = string.Join(" ", shortestPath.Select(x => x.Position).Select(x => x.X + "," + x.Y));
+                var result = string.Join(" ",
+                    shortestPath.Select(x => Math.Floor(x.Position.X + (x.Size == null ? 10 : x.Size.Width / 2)) + ","
+                        + Math.Floor(x.Position.Y + (x.Size == null ? 10 : x.Size.Height / 2))));
 
                 return JsonResponse.New(result);
             }

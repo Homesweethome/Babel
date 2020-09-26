@@ -67,6 +67,18 @@ async function addNode(data) {
         type: data.type,
     })
 }
+
+async function getBooks(id, au) {
+    return await axios.post('http://opacg.integration.smev/STORAGE/opacfindd/FindView/2.3.0', {
+        iddb: '',
+        ID: id,
+        AU: au,
+        TI: '',
+        PY: '',
+        PU: '',
+        PP: '',
+    })
+}
 export default {
     getAllHomeElements,
     setHomeElements,
@@ -77,5 +89,6 @@ export default {
     deleteFloor,
     searchePath,
     addNode,
-    getAllNode
+    getAllNode,
+    getBooks
 }
