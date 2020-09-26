@@ -12,8 +12,8 @@
     <!--        </foreightObject>-->
     <!--    </g>-->
     <g @click="select">
-        <circle :cx="data.positionStart.x"
-                :cy="data.positionStart.y"
+        <circle :cx="data.position.x"
+                :cy="data.position.y"
                 r="10"
                 stroke="black"
                 stroke-width="3"

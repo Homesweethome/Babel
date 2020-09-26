@@ -48,6 +48,25 @@ async function addImageFloor(level,data) {
 async function deleteFloor(idLevel) {
     return await axios.delete('/level/'+idLevel)
 }
+
+async function searchePath(source, target) {
+    return await axios.get('/path',{
+        sourceRoomName: source,
+        targetRoomName: target
+    })
+}
+async function getAllNode(level){
+    return await axios.get('/entity/'+level)
+}
+async function addNode(data) {
+    return await axios.post('/entity/'+data.floor,{
+        position: {
+            x: data.positionStart.x,
+            y: data.positionStart.y
+        },
+        type: data.type,
+    })
+}
 export default {
     getAllHomeElements,
     setHomeElements,
@@ -55,5 +74,8 @@ export default {
     addFloors,
     getFloors,
     addImageFloor,
-    deleteFloor
+    deleteFloor,
+    searchePath,
+    addNode,
+    getAllNode
 }

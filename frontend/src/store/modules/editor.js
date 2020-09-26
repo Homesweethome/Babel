@@ -7,7 +7,7 @@ const state = {
     selectNode: false,
     selectedNode: {},
     selectedHomeElement: {},
-    modeEditor: 'draw', //draw - рисование select - выбор обьекта для редактирования
+    modeEditor: 'draw', //draw - рисование, select  выбор обьекта для редактирования, searche
     drawTypeElement: 'node',
     floors: [
         {
@@ -17,6 +17,8 @@ const state = {
         }
     ],
     selectFloorId: 1,
+    searchRoom: [],
+    path: {},
 }
 
 const getters = {
@@ -24,8 +26,19 @@ const getters = {
 }
 
 const actions = {
-    set_active_floor({commit}, id){
+    select_home_element_for_searche({commit}, data){
+        commit('SAVE_SEARCHE_HOME_ELEMENT', data)
+    },
+    async search_path({state, commit}){
+        let path = await APIEditorServices.searchePath(
+            state.searchRoom[0].id,
+            state.searchRoom[1].id
+        )
+        commit('SAVE_PATH', path)
+    },
+    set_active_floor({commit, dispatch}, id){
         commit('SAVE_ACTIVE_FLOOR', id)
+        dispatch('get_all_nodes')
     },
     add_floor({commit}, data){
         let newFloors = APIEditorServices.addFloors(data)
@@ -56,10 +69,12 @@ const actions = {
         dispatch('get_all_home_elements')
         //commit('SAVE_NEW_HOME_ELEMENT', newElement)
     },
-    add_node({commit,state}, data) {
+    async add_node({dispatch,state}, data) {
         data.floor = state.selectFloorId
         data.type = state.drawTypeElement
-        commit('SAVE_NEW_NODE', data)
+        APIEditorServices.addNode(data)
+        dispatch('get_all_nodes')
+        //commit('SAVE_NEW_NODE', data)
     },
     // update_home_element({commit}, data){
     //
@@ -89,14 +104,18 @@ const actions = {
         let homeElement = await APIEditorServices.getAllHomeElements()
         commit('SAVE_HOME_ELEMENTS', homeElement.data)
     },
-    // get_all_node({commit}){
-    //
-    // },
+    async get_all_nodes({commit, state}){
+        let nodes = await APIEditorServices.getAllNode(state.selectFloorId)
+        commit('SAVE_NODES', nodes.data)
+    },
     set_draw_mode_editor({commit}){
         commit('SAVE_EDITOR_MODE', 'draw')
     },
     set_select_mode_editor({commit}){
         commit('SAVE_EDITOR_MODE', 'select')
+    },
+    set_searche_mode({commit}){
+      commit('SAVE_EDITOR_MODE', 'search')
     },
     set_draw_type_element({commit}, typeElement){
         commit('SAVE_DRAW_TYPE_ELEMENT', typeElement)
@@ -114,6 +133,15 @@ const actions = {
 
 
 const mutations = {
+    SAVE_PATH(state, path){
+      state.path = path
+    },
+    SAVE_SEARCHE_HOME_ELEMENT(state, payload){
+        state.searchRoom.push(payload)
+        if (state.searchRoom.length>2) {
+            state.searchRoom = state.searchRoom.shift()
+        }
+    },
     SAVE_ACTIVE_FLOOR(state, payload){
         state.selectFloorId = payload
     },
@@ -165,6 +193,9 @@ const mutations = {
     },
     SAVE_FLOORS(state, payload){
         state.floors = payload
+    },
+    SAVE_NODES(state, payload){
+        state.nodeElements = payload
     }
 }
 
