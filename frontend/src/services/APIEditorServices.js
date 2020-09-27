@@ -67,10 +67,14 @@ async function deleteFloor(idLevel) {
     return await axios.delete('/level/'+idLevel)
 }
 
-async function searchePath(source, target) {
+async function searchPath(source, target) {
+    console.log(source, target)
     return await axios.get('/path',{
-        sourceRoomName: source,
-        targetRoomName: target
+        params:{
+            sourceRoomName: source,
+            targetRoomName: target
+        }
+
     })
 }
 async function getAllNode(level){
@@ -108,7 +112,7 @@ export default {
     getFloors,
     addImageFloor,
     deleteFloor,
-    searchePath,
+    searchPath,
     addNode,
     getAllNode,
     getBooks,

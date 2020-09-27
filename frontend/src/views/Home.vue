@@ -18,7 +18,9 @@ color: #0E6795;
 font-weight: bold;
 font-size: .9rem;
 top: 55px;">
-            Войти в личный кабинет
+            <h4 @click="dialog=!dialog">
+                Войти в личный кабинет
+            </h4>
 <!--            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">-->
 <!--                <path d="M15 0C6.72875 0 0 6.72875 0 15C0 23.2712 6.72875 30 15 30C23.2712 30 30 23.2712 30 15C30 6.72875 23.2712 0 15 0ZM23.3725 24.255C22.5425 21.7887 20.2475 20 17.5 20H12.5C9.7525 20 7.46 21.79 6.63 24.2563C4.10125 21.9675 2.5 18.6712 2.5 15C2.5 8.1075 8.1075 2.5 15 2.5C21.8925 2.5 27.5 8.1075 27.5 15C27.5 18.67 25.9 21.9662 23.3725 24.255Z" fill="#0E6795"/>-->
 <!--                <path d="M15 6.25C12.2387 6.25 10 8.48875 10 11.25V12.5C10 15.2613 12.2387 17.5 15 17.5C17.7613 17.5 20 15.2613 20 12.5V11.25C20 8.48875 17.7613 6.25 15 6.25Z" fill="#0E6795"/>-->
@@ -1412,6 +1414,36 @@ top: 55px;">
             </svg>
 
         </div>
+        <v-dialog
+                v-model="dialog"
+                width="500"
+        >
+            <v-card>
+                <v-card-title class="headline  lighten-2">
+                   Авторизация
+                </v-card-title>
+
+                <v-card-text>
+                    <v-text-field
+                            v-model="user"
+                            label="Логин"
+                    />
+                </v-card-text>
+
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                            color="primary"
+                            text
+                            @click="auth"
+                    >
+                        Войти
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
       <v-row justify="center"
               align="center"
               style="height: 90vh;">
@@ -1434,7 +1466,9 @@ top: 55px;">
     name: 'Home',
     data() {
       return{
-        searchStr:''
+        searchStr:'',
+          dialog: false,
+          user: ''
       }
     },
     components: {
@@ -1446,6 +1480,13 @@ top: 55px;">
       })
     },
     methods:{
+        auth(){
+          if (this.user=='admin'){
+              this.$root.$router.push({path: '/editor'})
+          }else{
+              this.$root.$router.push({path: '/result'})
+          }
+        },
       ...mapActions('editor', {
         searchBooks: 'get_books'
       }),
@@ -1465,7 +1506,7 @@ top: 55px;">
     height: 100vh;
     left: 0px;
     top: 0px;
-    background: linear-gradient(180deg, rgba(249, 120, 167, 0) 0%, rgba(249, 120, 167, 0.24) 61.58%, rgba(249, 120, 166, 0.81) 100%);
+    background: linear-gradient(180deg, rgba(89, 211, 239, 0) 0%, rgba(94, 213, 240, 0.140625) 38.01%, #7DDEF4 100%);
   }
   .ellipse{
     position: absolute;

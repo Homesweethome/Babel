@@ -1,6 +1,6 @@
 <template>
     <v-container class="white--text">
-        <v-row>{{selectedNode}}
+        <v-row>
             <v-col cols="12">
                 <v-subheader class="subtitle-1">
                     Информация о объекте
@@ -17,6 +17,11 @@
                         rows="5"
                         v-model="data.description"
                         label="Новое описание"/>
+            </v-col>
+            <v-col
+                    cols="12">
+                <v-checkbox
+                        label="Только для персонала"/>
             </v-col>
         </v-row>
         <v-row>

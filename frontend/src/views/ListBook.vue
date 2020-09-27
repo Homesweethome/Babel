@@ -186,7 +186,7 @@
                                     <v-row>
                                         <v-col cols="4">
                                             <img
-                                                    style="width: 120px; height: auto; margin-left: 25px; margin-top: -50px "
+                                                    style="width: 100px; height: auto; margin-left: 25px; margin-top: -50px "
                                                     src="https://s003.radikal.ru/i202/1405/45/86a3a577fba4.png" />
                                         </v-col>
                                         <v-col cols="8">
@@ -265,7 +265,7 @@
                             </v-select>
                         </v-col>
                         <v-col cols="3">
-                            <v-btn @click="search">
+                            <v-btn @click="search()">
                                 Найти путь
                             </v-btn>
                         </v-col>
