@@ -109,15 +109,19 @@ namespace Babel.Api.Controllers
             var rooms = (await _roomService.Get()).Where(x => x.Type == "room" && x.Level == sourceRoom.Level);
             var nonPassable = (await _roomService.Get()).Where(x => x.Type != "room" && x.Level == sourceRoom.Level).ToList();
             var doors = (await _entityService.GetEntitiesByType("door")).Where(x => x.LevelId == sourceRoom.Level).ToList();
-            var stairs = await _entityService.GetEntitiesByType("stair");
-            var elevators = await _entityService.GetEntitiesByType("elevator");
+            var stairs = (await _entityService.GetEntitiesByType("stair")).Where(x => x.LevelId == sourceRoom.Level).ToList();
+            var elevators = (await _entityService.GetEntitiesByType("elevator")).Where(x => x.LevelId == sourceRoom.Level).ToList();
 
+            bool isAnotherLevel = false;
             if (targetRoom.Level != sourceRoom.Level)
             {
+                isAnotherLevel = true;
                 if (stairs.Any())
-                    target = stairs.First();
+                {}
+                    //target = stairs.First();
                 else if (elevators.Any())
-                    target = elevators.First();
+                {}
+                   // target = elevators.First();
                 else
                     return NotFound(
                         "Невозможно проложить путь: комнаты находятся на разных этажах, но нет ни лестниц ни лифта");
@@ -140,6 +144,33 @@ namespace Babel.Api.Controllers
                     {
                         graph.AddEdge(new Tuple<BasePathable, BasePathable>(door, room));
                         graph.AddEdge(new Tuple<BasePathable, BasePathable>(room, door));
+                    }
+                }
+            }
+
+            if (isAnotherLevel)
+            {
+                foreach (var door in stairs) 
+                {
+                    foreach (var room in rooms)
+                    {
+                        bool doesIntersects = DoesIntersects(door, room);
+                        if (doesIntersects)
+                        {
+                            target = room;
+                        }
+                    }
+                }
+
+                foreach (var door in elevators) 
+                {
+                    foreach (var room in rooms)
+                    {
+                        bool doesIntersects = DoesIntersects(door, room);
+                        if (doesIntersects)
+                        {
+                            target = room;
+                        }
                     }
                 }
             }
@@ -173,24 +204,7 @@ namespace Babel.Api.Controllers
                         result += current.Position.X + "," + current.Position.Y + " ";
                         continue;
                     }
-                    var next = shortestPath[i + 1];
-
-                    var currentRoomCenter = shortestPath[0].Position + shortestPath[0].Size / 2;
-
-                    var length = Math.Abs((current.Position - next.Position).Length);
-
-                    var lengthToCenter = Math.Abs((currentRoomCenter - next.Position).Length);
-
-                    if (lengthToCenter > length * 1.3)
-                    {
-                        result += next.Position.X + "," + next.Position.Y + " ";
-                    }
-                    else
-                    {
-                        result += Math.Floor(currentRoomCenter.X) + "," + Math.Floor(currentRoomCenter.Y) + " ";
-                    }
-
-                    previous = current.Position;
+                    continue;
                 }
 
                 previous = shortestPath.Last().Position + shortestPath.Last().Size / 2;
@@ -203,6 +217,7 @@ namespace Babel.Api.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return BadRequest("Не удалось построить маршрут");
             }
 
