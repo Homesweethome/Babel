@@ -183,11 +183,11 @@ namespace Babel.Api.Controllers
 
                     if (lengthToCenter > length * 1.3)
                     {
-                        result += next.Position.X + "," + next.Position.Y;
+                        result += next.Position.X + "," + next.Position.Y + " ";
                     }
                     else
                     {
-                        result += currentRoomCenter.X + "," + currentRoomCenter.Y;
+                        result += currentRoomCenter.X + "," + currentRoomCenter.Y + " ";
                     }
 
                     previous = current.Position;
