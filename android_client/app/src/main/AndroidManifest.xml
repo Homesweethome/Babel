@@ -16,8 +16,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CardCultureActivity"></activity>
-        <activity android:name=".LibrariesActivityList"></activity>
+        <activity android:name=".WifiSettings"></activity>
+        <activity
+            android:name=".SettingsWiFiActivity"
+            android:label="@string/title_activity_settings_wi_fi" />
+        <activity
+            android:name=".FloorActivity"
+            android:label="@string/title_activity_floor"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".CardCultureActivity" />
+        <activity android:name=".LibrariesActivityList" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,8 +1,6 @@
 <template>
     <v-container class="white--text">
-        <v-row>
-            {{selectedHomeElement}}
-            {{selectedNode}}
+        <v-row>{{selectedNode}}
             <v-col cols="12">
                 <v-subheader class="subtitle-1">
                     Информация о объекте
@@ -11,14 +9,14 @@
             <v-col cols="12">
                 <v-text-field
                         v-model="data.name"
-                        label="Название"/>
+                        label="Новое название"/>
             </v-col>
             <v-col
                     cols="12">
                 <v-textarea
                         rows="5"
                         v-model="data.description"
-                        label="Описание"/>
+                        label="Новое описание"/>
             </v-col>
         </v-row>
         <v-row>
@@ -72,10 +70,11 @@
                     this.deleteNode(this.selectedNode)
                 }
             },
-            save(){
+            async save(){
                 if (this.selectHomeElement){
-                    this.selectedHomeElement
-                    this.addHomeElement(this.data)
+                    this.data = Object.assign( this.selectedHomeElement, this.data)
+                    await this.addHomeElement(this.data)
+                    this.data = {}
                 }
                 this.unselect()
             }

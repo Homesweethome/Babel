@@ -15,8 +15,8 @@
                         :y="data.positionStart.y"
                         :width="data.size.width"
                         :height="data.size.height">
-            <div style="color: red;">
-                {{data.title}}
+            <div style="color: red;" class="text-center">
+                {{data.name}}
             </div>
         </foreignObject>
     </g>

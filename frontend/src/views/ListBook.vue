@@ -1,7 +1,7 @@
 <template>
     <div style="background-color: #f7f9fb">
         <v-container fluid style="padding: 0">
-            <v-row dense>
+            <v-row dense style="height: 100vh;">
                 <v-col cols="2">
                     <v-navigation-drawer width="100%">
                         <v-row>
@@ -242,16 +242,43 @@
                         </v-btn>
                         <v-toolbar-title>Построение маршрута</v-toolbar-title>
                         <v-spacer></v-spacer>
-                        <editor-floors />
+<!--                        <editor-floors />-->
                     </v-toolbar>
                     <v-row>
-                        <v-col cols="3">
 
+                    </v-row>
+                    <v-row>
+                        <v-col cols="3">
+                            <v-select
+                                    v-model="source"
+                                    :items="items"
+                                    label="Мое местоположение"
+                            ></v-select>
+                        </v-col>
+                        <v-col cols="3">
+                            <v-select
+                                    v-model="target"
+                                    :items="itemstarget"
+                                    label="Место назначения"
+                            >
+
+                            </v-select>
+                        </v-col>
+                        <v-col cols="3">
+                            <v-btn @click="search">
+                                Найти путь
+                            </v-btn>
                         </v-col>
                         <v-col cols="9">
-                            <editor-work-page />
+<!--                            <editor-work-page />-->
                         </v-col>
                     </v-row>
+                    <div>
+                        <editor-floors />
+                        <div style="position: absolute; height: 600px; width: 100%;   ">
+                            <editor-work-page />
+                        </div>
+                    </div>
                 </v-card>
             </v-dialog>
         </v-container>
@@ -259,7 +286,7 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
+    import {mapState, mapActions} from 'vuex'
     import EditorFloors from "@/components/Editor/EditorFloors";
     import MapForUser from "@/components/MapForUser";
     import EditorWorkPage from "@/components/Editor/EditorWorkPage";
@@ -268,7 +295,25 @@
         components: {EditorWorkPage, MapForUser, EditorFloors},
         data(){
             return{
-                dialog:false
+                dialog:false,
+                source: null,
+                target: 'БИБЛИОГРАФ',
+                items: [
+                    'К/Х-АТС',
+                    'К/Х1',
+                    'ИСК',
+                    'ИСК-НС',
+                    'ОГЛ',
+                    'БИБЛИОГРАФ'
+                ],
+                itemstarget: [
+                    'К/Х-АТС',
+                    'К/Х1',
+                    'ИСК',
+                    'ИСК-НС',
+                    'ОГЛ',
+                    'БИБЛИОГРАФ'
+                ],
             }
         },
         computed:{
@@ -278,6 +323,17 @@
             books(){
                 let n = JSON.parse(this.booksList)
                 return n
+            }
+        },
+        methods:{
+            ...mapActions('editor', {
+                getPath: 'search_path'
+            }),
+            async search(){
+                await this.getPath({
+                    source: this.source,
+                    target: this.target
+                })
             }
         }
     }

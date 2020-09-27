@@ -10,6 +10,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "bable";
 
     /*types_of_ premises*/
+    public static final String TABLE_TYPES_OF_PERMISES = "types_of_premises";
     public static final String KEY_ID = "_id";
     public static final String KEY_NAME_OF_PREMISES = "name_of_premises";
     public static final String KEY_NUMBER_OF_PREMISES = "number_of_premises";
@@ -33,12 +34,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String KEY_idtype_of_institution = "idtype_of_institution";
 
     /*point_perm_detect_wifi*/
+    public static final String TABLE_POINT_PERM_DETECT_WIFI = "point_perm_detect_wifi";
     public static final String KEY_ID_point_perm_detect_wifi = "_id";
     public static final String KEY_id_pint_in_mg = "id_pint_in_mg";
     public static final String KEY_ssid = "ssid";
     public static final String KEY_level = "level";
 
     /*points_in_premises*/
+    public static final String TABLE_POINTS_IN_PREMISES = "points_in_premises";
     public static final String KEY_ID_points_in_premises = "_id";
     public static final String KEY_id_permisses = "id_permissese";
     public static final String KEY_img_point_coordinates_x = "img_point_coordinates_x";
