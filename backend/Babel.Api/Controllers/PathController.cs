@@ -170,7 +170,7 @@ namespace Babel.Api.Controllers
                     var current = shortestPath[i];
                     if (current.GetType() == typeof(Entity))
                     {
-                        result += current.Position.X + "," + current.Position.Y;
+                        result += current.Position.X + "," + current.Position.Y + " ";
                         continue;
                     }
                     var next = shortestPath[i + 1];
