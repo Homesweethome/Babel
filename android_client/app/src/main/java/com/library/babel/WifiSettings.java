@@ -7,9 +7,11 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import java.util.List;
 public class WifiSettings extends AppCompatActivity {
 
     private Button btnStartSkan;
+    private Button btnSave;
     private WifiManager wifiManager;
     private WifiScanReceiver wifiReceiver;
     private Element [] nets;
@@ -43,10 +46,10 @@ public class WifiSettings extends AppCompatActivity {
             public void onClick(View view) {
 
                 String[] permiss = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_WIFI_STATE,
-                        Manifest.permission.CHANGE_WIFI_STATE,
-                        Manifest.permission.ACCESS_NETWORK_STATE};
+                                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                                Manifest.permission.ACCESS_WIFI_STATE,
+                                                Manifest.permission.CHANGE_WIFI_STATE,
+                                                Manifest.permission.ACCESS_NETWORK_STATE};
 
                 Permissions perms = new Permissions(permiss, view, view.getContext(), wifiManager);
                 if (perms.hasPermissions()){
@@ -56,6 +59,31 @@ public class WifiSettings extends AppCompatActivity {
                 }
             }
         });
+
+        btnSave = (Button) findViewById(R.id.btnSave);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    onResume();
+                }catch (Exception e){
+                    Log.d("TAG", "Ошибка! " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    protected void onResume() {
+        registerReceiver(
+                wifiReceiver,
+                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+        );
+        super.onResume();
+    }
+
+    protected void onPause() {
+        unregisterReceiver(wifiReceiver);
+        super.onPause();
     }
 
     private class WifiScanReceiver extends BroadcastReceiver {
@@ -92,17 +120,23 @@ public class WifiSettings extends AppCompatActivity {
         }
 
         public View getView(int position, View convertView, ViewGroup parent){
-            LayoutInflater inflater = context.getLayoutInflater();
-            View item = inflater.inflate(R.layout.items_wifi, null);
+            try {
+                LayoutInflater inflater = context.getLayoutInflater();
+                View item = inflater.inflate(R.layout.items_wifi, null);
 
-            TextView tvSsid = (TextView) item.findViewById(R.id.tvSSID);
-            tvSsid.setText(nets[position].getTitle());
+                TextView tvSsid = (TextView) item.findViewById(R.id.tvSSID);
+                tvSsid.setText(nets[position].getTitle());
 
 
-            TextView tvLevel = (TextView)item.findViewById(R.id.tvLevel);
-            tvLevel.setText(nets[position].getLevel());
+                TextView tvLevel = (TextView)item.findViewById(R.id.tvLevel);
+                tvLevel.setText(nets[position].getLevel());
+                return item;
+            }catch (Exception e){
 
-            return item;
+                Log.d("TAG", "Ошибка! " + e.getMessage());
+                return new View(context);
+
+            }
         }
     }
 
