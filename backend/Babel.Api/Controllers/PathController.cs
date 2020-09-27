@@ -83,6 +83,9 @@ namespace Babel.Api.Controllers
         [Route("")]
         public async Task<IActionResult> GetPathToRoom(string sourceRoomName, string targetRoomName)
         {
+            if (string.IsNullOrEmpty(sourceRoomName) || string.IsNullOrEmpty(targetRoomName))
+                return NotFound("Идентификаторы исходной и целевой комнаты не указаны");
+
             var sourceRoom = await _roomService.GetRoomByName(sourceRoomName);
             var targetRoom = await _roomService.GetRoomByName(targetRoomName);
 
@@ -101,11 +104,24 @@ namespace Babel.Api.Controllers
 
         private async Task<IActionResult> PathToRoom(BaseRoom sourceRoom, BaseRoom targetRoom)
         {
+            var target = (BasePathable) targetRoom;
+
             var rooms = (await _roomService.Get()).Where(x => x.Type == "room" && x.Level == sourceRoom.Level);
             var nonPassable = (await _roomService.Get()).Where(x => x.Type != "room" && x.Level == sourceRoom.Level).ToList();
             var doors = (await _entityService.GetEntitiesByType("door")).Where(x => x.LevelId == sourceRoom.Level).ToList();
             var stairs = await _entityService.GetEntitiesByType("stair");
             var elevators = await _entityService.GetEntitiesByType("elevator");
+
+            if (targetRoom.Level != sourceRoom.Level)
+            {
+                if (stairs.Any())
+                    target = stairs.First();
+                else if (elevators.Any())
+                    target = elevators.First();
+                else
+                    return NotFound(
+                        "Невозможно проложить путь: комнаты находятся на разных этажах, но нет ни лестниц ни лифта");
+            }
 
             // строим граф соединений всех комнат
             var graph = new Graph<BasePathable>();
@@ -133,31 +149,9 @@ namespace Babel.Api.Controllers
             try
             {
                 // сначала графами строим путь
-                var shortestPath = shortestPathFunc(rooms.First(x => x.Id == targetRoom.Id)).ToList();
+                var shortestPath = shortestPathFunc(rooms.First(x => x.Id == target.Id)).ToList();
 
                /* string result = "";
-
-                var previous = shortestPath[0].Position + shortestPath[0].Size / 2;
-                previous.X = Math.Floor(previous.X);
-                previous.Y = Math.Floor(previous.Y);
-
-                for (int i = 0; i < shortestPath.Count() - 1; i++)
-                {
-                    var current = shortestPath[i];
-                    if (current.GetType() == typeof(Entity) && i < shortestPath.Count - 1)
-                    {
-                        previous = current.Position;
-                        continue;
-                    }
-
-                    var next = shortestPath[i + 1];
-
-                    var pathThroughRoom = await PathThroughRoom(current, previous, next.Position, nonPassable);
-
-                    result += string.Join(" ", pathThroughRoom.Select(x => x.X + "," + x.Y)) + " ";
-
-                    previous = next.Position;
-                }
 
                 result = result.Trim();*/
 
