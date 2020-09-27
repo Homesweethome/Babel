@@ -5,20 +5,38 @@ async function getAllHomeElements() {
 }
 
 async function setHomeElements(homeElement) {
-    return await  axios.post('/room', {
-        level: homeElement.floor,
-        type: homeElement.type,
-        positionStart: {
-            x: homeElement.positionStart.x,
-            y: homeElement.positionStart.y
-        },
-        size: {
-            width: homeElement.size.width,
-            height: homeElement.size.height
-        },
-        description: homeElement.description,
-        name: homeElement.name
-    })
+    if (homeElement.id){
+        return await  axios.put('/room/'+homeElement.id, {
+            level: homeElement.floor,
+            type: homeElement.type,
+            positionStart: {
+                x: homeElement.positionStart.x,
+                y: homeElement.positionStart.y
+            },
+            size: {
+                width: homeElement.size.width,
+                height: homeElement.size.height
+            },
+            description: homeElement.description,
+            name: homeElement.name
+        })
+    } else {
+        return await  axios.post('/room', {
+            level: homeElement.floor,
+            type: homeElement.type,
+            positionStart: {
+                x: homeElement.positionStart.x,
+                y: homeElement.positionStart.y
+            },
+            size: {
+                width: homeElement.size.width,
+                height: homeElement.size.height
+            },
+            description: homeElement.description,
+            name: homeElement.name
+        })
+    }
+
 }
 
 function deleteHomeElement(idHomeElement) {
@@ -67,16 +85,19 @@ async function addNode(data) {
         type: data.type,
     })
 }
-
+ async function deleteNode(id){
+    return await axios.delete('/entity/'+id)
+ }
 async function getBooks(id, au) {
-    return await axios.post('http://opacg.integration.smev/STORAGE/opacfindd/FindView/2.3.0', {
-        iddb: '',
+    return await axios.post('/book/find', {
+        iddb: '4',
         ID: id,
         AU: au,
         TI: '',
         PY: '',
         PU: '',
         PP: '',
+        RUSMARC: ''
     })
 }
 export default {
@@ -90,5 +111,6 @@ export default {
     searchePath,
     addNode,
     getAllNode,
-    getBooks
+    getBooks,
+    deleteNode
 }

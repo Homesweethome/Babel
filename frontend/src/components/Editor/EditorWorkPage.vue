@@ -15,7 +15,7 @@
             ><g>
 
                 <home-element-wrapper />
-                <polyline points="297,125 416,155 510,152 624,162 672,126" style="fill:none;stroke:black;stroke-width:3"></polyline>
+                <polyline points="104,157 127,166 155,146 150,184 331,193 279,184 292,146" style="fill:none;stroke:black;stroke-width:3"></polyline>
                 <home-element
                         v-show="stageDrawHomeElement!='start'"
                         :data="newHomeElement"
@@ -84,7 +84,7 @@
                 const x = e.clientX - 390;
                 const y = e.clientY -64;
 
-                if (this.drawHomeElement && this.drawTypeElement==='room') {
+                if (this.drawHomeElement) {
                     this.newHomeElement = {
                         positionStart: {
                             x: Math.min(x, this.startX),
@@ -96,7 +96,6 @@
                         },
                         type: this.drawTypeElement,
                         newElement: true,
-                        id: this.startY,
                     }
                 }
             },
@@ -135,7 +134,6 @@
                                             height: Math.abs(y - this.startY),
                                         },
                                         type: this.drawTypeElement,
-                                        id: this.startY-43
                                     })
                                     this.startX = null;
                                     this.startY = null;

@@ -25,11 +25,7 @@ top: 55px;">
 <!--            </svg>-->
 
         </div>
-        <div style="position: absolute;
-left: -0.01%;
-right: 4.39%;
-top: 42%;
-">
+        <div style="position: absolute; left: -0.01%; right: 4.39%; top: 42%;">
             <svg width="1377" height="559" viewBox="0 0 1377 559" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g opacity="0.6">
                     <path opacity="0.6" d="M1370.61 471.635L1375.2 474.148L1376.79 473.354L1372.19 470.841L1370.61 471.635Z" fill="#FFFEE9"/>
@@ -1421,7 +1417,6 @@ top: 42%;
               style="height: 90vh;">
         <v-col md="10" offset="1" style="color: #F9954B !important;">
           <v-text-field
-
                   solo
                   @keyup.enter="search"
                   v-model="searchStr"

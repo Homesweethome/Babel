@@ -1,6 +1,6 @@
 <template>
     <v-container class="white--text">
-        <v-row>
+        <v-row>{{selectedNode}}
             <v-col cols="12">
                 <v-subheader class="subtitle-1">
                     Информация о объекте
@@ -8,33 +8,15 @@
             </v-col>
             <v-col cols="12">
                 <v-text-field
-                        label="Название"/>
+                        v-model="data.name"
+                        label="Новое название"/>
             </v-col>
             <v-col
                     cols="12">
                 <v-textarea
                         rows="5"
-                        label="Описание"/>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                        label="ИД в RUSMARC"/>
-            </v-col>
-            <v-subheader>
-                Объекты принадлежащие по RUSMARC
-            </v-subheader>
-            <v-col cols="12">
-                <v-list>
-                    <v-list-item>
-                        Объект 1
-                    </v-list-item>
-                    <v-list-item>
-                        Объект 2
-                    </v-list-item>
-                    <v-list-item>
-                        Объект 3
-                    </v-list-item>
-                </v-list>
+                        v-model="data.description"
+                        label="Новое описание"/>
             </v-col>
         </v-row>
         <v-row>
@@ -44,7 +26,7 @@
                 </v-btn>
             </v-col>
             <v-col>
-                <v-btn class="primary">
+                <v-btn :disabled="this.selectNode" @click="save" class="primary">
                     Сохранить
                 </v-btn>
             </v-col>
@@ -56,6 +38,12 @@
     import {mapState, mapActions} from 'vuex'
     export default {
         name: "EditorPropertiesElement",
+        data(){
+            return{
+                name:'',
+                    data: {}
+            }
+        },
         computed:{
             ...mapState('editor', {
                 selectedNode: 'selectedNode',
@@ -70,7 +58,10 @@
             ...mapActions('editor', {
                 deleteHomeElement: 'delete_home_element',
                 deleteNode: 'delete_node',
-                getAllNodeElements: 'get_all_node_elements'
+                getAllNodeElements: 'get_all_node_elements',
+                addHomeElement: 'add_home_element',
+                addNode: 'add_node',
+                unselect: 'unselect'
             }),
             deleteElement(){
                 if (this.selectHomeElement){
@@ -78,7 +69,18 @@
                 } else if (this.selectNode){
                     this.deleteNode(this.selectedNode)
                 }
+            },
+            async save(){
+                if (this.selectHomeElement){
+                    this.data = Object.assign( this.selectedHomeElement, this.data)
+                    await this.addHomeElement(this.data)
+                    this.data = {}
+                }
+                this.unselect()
             }
+        },
+        mounted() {
+
         }
     }
 </script>

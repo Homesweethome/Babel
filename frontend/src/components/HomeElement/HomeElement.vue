@@ -1,6 +1,7 @@
 <template>
     <g @click="select">
-        <room :data="data"/>
+        <room  v-if="data.type=='room'" :data="data"/>
+        <wall v-else  :data="data" />
     </g>
 
 </template>

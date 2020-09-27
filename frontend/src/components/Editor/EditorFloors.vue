@@ -39,7 +39,7 @@
 <!--        > Удалить выбранный этаж-->
 <!--        </v-btn>-->
 <!--    </v-bottom-navigation>-->
-    <v-btn-toggle>
+    <v-btn-toggle v-model="activeBtn">
         <v-btn
                 @click="setActiveFloor(floor.id)"
                 v-for="floor in floors"
@@ -47,11 +47,11 @@
             <span>{{floor.title}}</span>
             <span>этаж</span>
         </v-btn>
-        <v-btn
+        <v-btn  v-show="showBtnEdit"
                 @click="addFloor({title: '3', value: 0})"
         > + этаж
         </v-btn>
-        <v-btn>
+        <v-btn v-show="showBtnEdit">
             <v-file-input
                     accept="image/png, image/jpeg, image/bmp"
                     placeholder="План этажа"
@@ -63,7 +63,7 @@
                     @change="handleFilesEducationUpload"
             ></v-file-input>
         </v-btn>
-        <v-btn
+        <v-btn  v-show="showBtnEdit"
                 @click="deleteFloor(activeFloorId)"
         > Удалить выбранный этаж
         </v-btn>
@@ -79,6 +79,9 @@
                 filesEdu: '',
                 activeBtn: 1,
             }
+        },
+        props:{
+          showBtnEdit: false
         },
         computed:{
             ...mapState('editor', {

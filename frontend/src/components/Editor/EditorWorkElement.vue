@@ -33,7 +33,9 @@
                         @click="setDrawTypeElement(homeElement.value)"
                 >
                     <v-list-item-action>
-                        <v-icon class="white--text">{{homeElement.icon}}</v-icon>
+                        <v-avatar>
+                            <img :src="require('@/assets/icon/white/'+homeElement.icon)" alt="">
+                        </v-avatar>
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title class="text-left white--text">{{homeElement.title}}</v-list-item-title>
@@ -50,7 +52,9 @@
                         @click="setDrawTypeElement(element.value)"
                 >
                     <v-list-item-action>
-                        <v-icon class="white--text">{{element.icon}}</v-icon>
+                        <v-avatar>
+                            <img :src="require('@/assets/icon/white/'+element.icon)" alt="">
+                        </v-avatar>
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title class="text-left white--text">{{element.title}}</v-list-item-title>
@@ -92,37 +96,37 @@
                 homeElements: [
                     {
                         title: 'Комната',
-                        icon: 'domain',
+                        icon: 'room.svg',
                         value: 'room'
                     },
                     {
                         title: 'Стеллаж',
-                        icon: '',
+                        icon: 'rack.svg',
                         value: 'rack'
                     },
                     {
                         title: 'Кафедра',
-                        icon: '',
+                        icon: 'chair.svg',
                         value: 'chair'
                     },
                     {
                         title: 'Место для чтения',
-                        icon: '',
+                        icon: 'placeforread.svg',
                         value: 'placeforread'
                     },
                     {
                         title: 'Диван',
-                        icon: '',
+                        icon: 'sofa.svg',
                         value: 'sofa'
                     },
                     {
                         title: 'Стол с ПК',
-                        icon: '',
+                        icon: 'pc.svg',
                         value: 'pc'
                     },
                     {
                         title: 'МФУ',
-                        icon: '',
+                        icon: 'mfu.svg',
                         value: 'mfu'
                     },
                 ],
@@ -130,17 +134,17 @@
                 nodeElements: [
                     {
                         title: 'Дверь',
-                        icon: 'radio_button_unchecked',
+                        icon: 'door.svg',
                         value: 'door'
                     },
                     {
                         title: 'Лестница',
-                        icon: 'tab',
+                        icon: 'stair.svg',
                         value: 'stair'
                     },
                     {
                         title: 'Лифт',
-                        icon: 'devices',
+                        icon: 'elevator.svg',
                         value: 'elevator'
                     }
                 ]

@@ -6,18 +6,14 @@
                 :width="data.size.width"
                 :height="data.size.height"
                 :stroke="selectedRoom"
-                stroke-width="5"
-                stroke-dasharray="20"
-                fill="#eee"
+                stroke-width="2"
+                stroke-dasharray="10"
+                :fill="colorFiil"
                 fill-opacity=".4"
         />
         <foreignObject  :x="data.positionStart.x"
-                        :y="data.positionStart.y"
-                        :width="data.size.width"
-                        :height="data.size.height">
-            <div style="color: red;">
-                Новая комната
-            </div>
+                        :y="data.positionStart.y">
+<!--                <img width="10" height="10" :src="require(pathIcon)"/>-->
         </foreignObject>
     </g>
 </template>
@@ -40,14 +36,37 @@
                 selectedHomeElement: 'selectedHomeElement'
             }),
             colorStroke(){
-                return this.data.newElement ? "red" : "#1565c0"
+                return this.data.newElement ? "red" : "#584B01"
             },
             selectedRoom(){
                 return this.selected ? "green" : this.colorStroke
             },
             selected(){
                 return this.data.id == this.selectedHomeElement.id
+            },
+            colorBorder(){
+                return '#584B01'
+            },
+            colorFiil(){
+                return '#BAA635'
+            },
+            pathIcon(){
+                let path = ''
+                switch (this.data.type) {
+                    case 'rack' : path = 'rack.svg'
+                        break;
+                    case 'chair' : path = 'chair.svg'
+                        break;
+                    case 'sofa' : path = 'sofa.svg'
+                        break;
+                    case 'pc' : path = 'pc.svg'
+                        break;
+                    case 'mfu' : path = 'mfu.svg'
+                        break;
+                }
+                return path
             }
+
         },
         methods:{
             ...mapActions('editor', {
