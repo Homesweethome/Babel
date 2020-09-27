@@ -163,7 +163,7 @@ namespace Babel.Api.Controllers
                 var previous = shortestPath[0].Position + shortestPath[0].Size / 2;
                 previous.X = Math.Floor(previous.X);
                 previous.Y = Math.Floor(previous.Y);
-                result += previous.X + "," + previous.Y;
+                result += previous.X + "," + previous.Y + " ";
 
                 for (int i = 1; i < shortestPath.Count() - 1; i++)
                 {
