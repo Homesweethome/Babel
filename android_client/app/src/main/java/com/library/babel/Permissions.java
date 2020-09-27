@@ -12,8 +12,12 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,7 +35,7 @@ public class Permissions extends AppCompatActivity {
     private String[] permissions;
     private View view;
     private Context context;
-    private WifiManager wifiManager;
+    public WifiManager wifiManager;
     private WifiScanReceiver wifiReceiver;
     private List<ScanResult> wifiList;
     private WifiPoints [] nets;
@@ -72,12 +76,18 @@ public class Permissions extends AppCompatActivity {
 
     private void requestPerms(){
         String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_WIFI_STATE,
-                Manifest.permission.CHANGE_WIFI_STATE,
-                Manifest.permission.ACCESS_NETWORK_STATE};
+                                            Manifest.permission.ACCESS_FINE_LOCATION,
+                                            Manifest.permission.ACCESS_WIFI_STATE,
+                                            Manifest.permission.CHANGE_WIFI_STATE,
+                                            Manifest.permission.ACCESS_NETWORK_STATE};
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            requestPermissions(permissions,PERMISSION_REQUEST_CODE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                try {
+                    ActivityCompat.requestPermissions((Activity)context, permissions, PERMISSION_REQUEST_CODE);
+                }catch (Exception e){
+                    Log.d("tag", e.getMessage());
+                }
+            }
         }
     }
 
@@ -110,31 +120,31 @@ public class Permissions extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
                 if (shouldShowRequestPermissionRationale(permissions[0])){
-                    Toast.makeText(this, "Доступ к WiFi закрыт.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Доступ к WiFi закрыт.", Toast.LENGTH_SHORT).show();
 
                 } else {
                     showNoStoragePermissionSnackbar();
                 }
                 if (shouldShowRequestPermissionRationale(permissions[1])){
-                    Toast.makeText(this, "Доступ к WiFi закрыт.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Доступ к WiFi закрыт.", Toast.LENGTH_SHORT).show();
 
                 } else {
                     showNoStoragePermissionSnackbar();
                 }
                 if (shouldShowRequestPermissionRationale(permissions[2])){
-                    Toast.makeText(this, "Доступ к WiFi закрыт.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Доступ к WiFi закрыт.", Toast.LENGTH_SHORT).show();
 
                 } else {
                     showNoStoragePermissionSnackbar();
                 }
                 if (shouldShowRequestPermissionRationale(permissions[3])){
-                    Toast.makeText(this, "Доступ к WiFi закрыт.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Доступ к WiFi закрыт.", Toast.LENGTH_SHORT).show();
 
                 } else {
                     showNoStoragePermissionSnackbar();
                 }
                 if (shouldShowRequestPermissionRationale(permissions[4])){
-                    Toast.makeText(this, "Доступ к WiFi закрыт.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Доступ к WiFi закрыт.", Toast.LENGTH_SHORT).show();
 
                 } else {
                     showNoStoragePermissionSnackbar();
@@ -172,7 +182,7 @@ public class Permissions extends AppCompatActivity {
                                             Manifest.permission.ACCESS_WIFI_STATE,
                                             Manifest.permission.CHANGE_WIFI_STATE,
                                             Manifest.permission.ACCESS_NETWORK_STATE};
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[0])) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale((Activity)context, permissions[0])) {
             final String message = "Storage permission is needed to show files count";
             Snackbar.make(((Activity)context).findViewById(R.id.main_activity), message, Snackbar.LENGTH_LONG)
                     .setAction("GRANT", new View.OnClickListener() {
@@ -185,7 +195,7 @@ public class Permissions extends AppCompatActivity {
         } else {
             requestPerms();
         }
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[1])) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale((Activity)context, permissions[1])) {
             final String message = "Storage permission is needed to show files count";
             Snackbar.make(((Activity)context).findViewById(R.id.main_activity), message, Snackbar.LENGTH_LONG)
                     .setAction("GRANT", new View.OnClickListener() {
@@ -198,7 +208,7 @@ public class Permissions extends AppCompatActivity {
         } else {
             requestPerms();
         }
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[2])) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale((Activity)context, permissions[2])) {
             final String message = "Storage permission is needed to show files count";
             Snackbar.make(((Activity)context).findViewById(R.id.main_activity), message, Snackbar.LENGTH_LONG)
                     .setAction("GRANT", new View.OnClickListener() {
@@ -211,7 +221,7 @@ public class Permissions extends AppCompatActivity {
         } else {
             requestPerms();
         }
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[3])) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale((Activity)context, permissions[3])) {
             final String message = "Storage permission is needed to show files count";
             Snackbar.make(((Activity)context).findViewById(R.id.main_activity), message, Snackbar.LENGTH_LONG)
                     .setAction("GRANT", new View.OnClickListener() {
@@ -224,7 +234,7 @@ public class Permissions extends AppCompatActivity {
         } else {
             requestPerms();
         }
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[4])) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale((Activity)context, permissions[4])) {
             final String message = "Storage permission is needed to show files count";
             Snackbar.make(((Activity)context).findViewById(R.id.main_activity), message, Snackbar.LENGTH_LONG)
                     .setAction("GRANT", new View.OnClickListener() {
@@ -257,7 +267,11 @@ public class Permissions extends AppCompatActivity {
                 nets[i] = new WifiPoints(ssid, Double.parseDouble(level));
 
             }
+
+
         }
+
+
     }
 
 }
