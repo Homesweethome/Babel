@@ -15,7 +15,7 @@
             ><g>
 
                 <home-element-wrapper />
-                <polyline points="104,157 127,166 155,146 150,184 331,193 279,184 292,146" style="fill:none;stroke:black;stroke-width:3"></polyline>
+                <polyline :points="path" style="fill:none;stroke:black;stroke-width:3"></polyline>
                 <home-element
                         v-show="stageDrawHomeElement!='start'"
                         :data="newHomeElement"
@@ -62,7 +62,8 @@
                 modeEditor: 'modeEditor',
                 drawTypeElement: 'drawTypeElement',
                 selectFloorId: 'selectFloorId',
-                floors: 'floors'
+                floors: 'floors',
+                path: 'path'
             }),
             drawHomeElement(){
                 return this.modeEditor==='draw'

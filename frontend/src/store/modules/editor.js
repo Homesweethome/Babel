@@ -54,12 +54,13 @@ const actions = {
     select_home_element_for_searche({commit}, data){
         commit('SAVE_SEARCHE_HOME_ELEMENT', data)
     },
-    async search_path({state, commit}, rooms){
-        let path = await APIEditorServices.searchePath(
-            rooms.source,
-            rooms.target
+    async search_path({commit}, room){
+        console.log(room)
+        let path = await APIEditorServices.searchPath(
+            room.source,
+            room.target
         )
-        commit('SAVE_PATH', path)
+        commit('SAVE_PATH', path.data)
     },
     set_active_floor({commit, dispatch}, id){
         commit('SAVE_ACTIVE_FLOOR', id)
