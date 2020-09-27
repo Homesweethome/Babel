@@ -35,4 +35,5 @@
     <string name="title_notifications">Описание</string>
     <string name="tvNameRoom">Наименование комнаты</string>
     <string name="choordMPoint">Координата M точки</string>
+    <string name="nameLabelNumberFloor">Этаж</string>
 </resources>
