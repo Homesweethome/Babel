@@ -187,7 +187,7 @@ namespace Babel.Api.Controllers
                     }
                     else
                     {
-                        result += currentRoomCenter.X + "," + currentRoomCenter.Y + " ";
+                        result += Math.Floor(currentRoomCenter.X) + "," + Math.Floor(currentRoomCenter.Y) + " ";
                     }
 
                     previous = current.Position;
