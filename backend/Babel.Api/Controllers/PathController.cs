@@ -80,6 +80,7 @@ namespace Babel.Api.Controllers
         /// <param name="targetRoomName"></param>
         /// <returns></returns>
         [HttpGet]
+        [Route("")]
         public async Task<IActionResult> GetPathToRoom(string sourceRoomName, string targetRoomName)
         {
             var sourceRoom = await _roomService.GetRoomByName(sourceRoomName);
@@ -103,7 +104,7 @@ namespace Babel.Api.Controllers
             var rooms = (await _roomService.Get()).Where(x => x.Type == "room" && x.Level == sourceRoom.Level);
             var nonPassable = (await _roomService.Get()).Where(x => x.Type != "room" && x.Level == sourceRoom.Level).ToList();
             var doors = (await _entityService.GetEntitiesByType("door")).Where(x => x.LevelId == sourceRoom.Level).ToList();
-            var stairs = await _entityService.GetEntitiesByType("stairs");
+            var stairs = await _entityService.GetEntitiesByType("stair");
             var elevators = await _entityService.GetEntitiesByType("elevator");
 
             // строим граф соединений всех комнат
@@ -160,9 +161,49 @@ namespace Babel.Api.Controllers
 
                 result = result.Trim();*/
 
-                 var result = string.Join(" ",
+                 /*var result = string.Join(" ",
                      shortestPath.Select(x => Math.Floor(x.Position.X + (x.Size == null ? 0 : x.Size.Width / 2)) + ","
-                         + Math.Floor(x.Position.Y + (x.Size == null ? 0 : x.Size.Height / 2))));
+                         + Math.Floor(x.Position.Y + (x.Size == null ? 0 : x.Size.Height / 2))));*/
+
+                string result = "";
+                var previous = shortestPath[0].Position + shortestPath[0].Size / 2;
+                previous.X = Math.Floor(previous.X);
+                previous.Y = Math.Floor(previous.Y);
+                result += previous.X + "," + previous.Y;
+
+                for (int i = 1; i < shortestPath.Count() - 1; i++)
+                {
+                    var current = shortestPath[i];
+                    if (current.GetType() == typeof(Entity))
+                    {
+                        result += current.Position.X + "," + current.Position.Y;
+                        continue;
+                    }
+                    var next = shortestPath[i + 1];
+
+                    var currentRoomCenter = shortestPath[0].Position + shortestPath[0].Size / 2;
+
+                    var length = Math.Abs((current.Position - next.Position).Length);
+
+                    var lengthToCenter = Math.Abs((currentRoomCenter - next.Position).Length);
+
+                    if (lengthToCenter > length * 1.3)
+                    {
+                        result += next.Position.X + "," + next.Position.Y;
+                    }
+                    else
+                    {
+                        result += currentRoomCenter.X + "," + currentRoomCenter.Y;
+                    }
+
+                    previous = current.Position;
+                }
+
+                previous = shortestPath.Last().Position + shortestPath.Last().Size / 2;
+                previous.X = Math.Floor(previous.X);
+                previous.Y = Math.Floor(previous.Y);
+                result += previous.X + "," + previous.Y;
+
 
                 return JsonResponse.New(result);
             }
